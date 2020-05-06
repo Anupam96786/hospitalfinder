@@ -1,0 +1,36 @@
+{%extends 'homebase.html'%}
+{%block title%}
+COVID-19 Survey
+{%endblock%}
+
+{%block navpage%}
+<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    <li class="nav-item active"><a class="nav-link" href='{% url "survey"%}'>Take COVID-19 Survey</a></li>
+    <li class="nav-item"><a class="nav-link" href='{% url "finder" %}'><i class="fa fa-ambulance" aria-hidden="true"></i> Nearby Hospitals</a></li>
+    <li class="nav-item"><a class="nav-link" href='{% url "tracker" %}'>COVID-19 Tracker</a></li>
+</ul>
+{%endblock%}
+
+{%block content%}
+
+<script>
+  $(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+  });
+</script>
+
+<p>Fill this survey to know more:</p>
+<p>Long press or hover mouse over the symptoms for more information.</p>
+<form method="post" action='surveysubmit'>
+    {% csrf_token %}
+    {% include 'surveyform.html' %}
+    <button type="submit" class="btn btn-success">Get Results</button>
+</form>
+
+{%block result%}
+
+{%endblock%}
+
+<a href="https://www.who.int/docs/default-source/coronaviruse/situation-reports/20200402-sitrep-73-covid-19.pdf" target="blank">Source</a>
+
+{%endblock%}

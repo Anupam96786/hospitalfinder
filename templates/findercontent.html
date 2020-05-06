@@ -1,0 +1,155 @@
+<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/p5.js"></script>
+<!--
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/addons/p5.sound.min.js"></script>
+-->
+<div class="row">
+  <div class='col-12' style="width: 640px; height: 480px" id="mapContainer">
+      <button type="btn"  style="position:absolute;z-index: 9999;right:10;top: 10;" class="btn btn-outline-danger" id="recentre" type="submit">
+          <i class="fa fa-crosshairs" aria-hidden="true"></i>RECENTRE
+      </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <div class="table-responsive">
+      <table class="table table-sm table-dark" id="table"></table>
+    </div>
+  </div>
+</div>
+
+
+<script>
+let curloc;
+let main_url='https://places.ls.hereapi.com/places/v1/discover/explore?in=';
+let latlang;
+let ending='%3Br%3D45000&cat=hospital&size=1000&apiKey=yqGj9Hvx5Gvgqp-g9Eg37Z-sSIHEMwZgbzcWYOnxzxM';
+let url;
+let data;
+let hosp_loc;
+let mark;
+let len;
+var table,cnt=0,cols=[],sl=1;
+
+
+//setup calls geo locator
+function setup() {
+getPosition();
+}
+
+//fetches location using ip
+function getPosition() {
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position){
+                curloc={lat:position.coords.latitude, lng:position.coords.longitude};
+                latlang=position.coords.latitude+'%2C'+position.coords.longitude;
+                mapLoader();
+            });
+        } else {
+            alert("Sorry, your browser does not support HTML5 geolocation.");
+        }
+    let btn=select('#recentre');
+    btn.mousePressed(recentre);
+    }
+
+
+function recentre(){
+  cpy.setCenter(curloc);
+  cpy.setZoom(13);
+  
+}
+
+//loads the map
+function mapLoader(){
+  var platform = new H.service.Platform({
+    'apikey': 'yqGj9Hvx5Gvgqp-g9Eg37Z-sSIHEMwZgbzcWYOnxzxM'
+  });
+  var maptypes = platform.createDefaultLayers();
+  var map = new H.Map(
+  document.getElementById('mapContainer'),maptypes.vector.normal.map,{zoom: 13,center: curloc});
+  cpy=map;
+  var mapEvents = new H.mapevents.MapEvents(map);
+  new H.mapevents.Behavior(mapEvents);
+  var ui = H.ui.UI.createDefault(map, maptypes);
+  //adding primary location marker
+  var picon=new H.map.Icon('https://img.icons8.com/ultraviolet/60/000000/marker.png');
+  var mylocmarker=new H.map.Marker(curloc,{icon: picon});
+  map.addObject(mylocmarker);
+  mylocmarker.setData("<p>YOU ARE HERE</p>");
+  
+  //making marker interactive
+  mylocmarker.addEventListener("tap", event =>{
+    var bubble=new H.ui.InfoBubble(curloc,{content: event.target.getData()});
+    ui.addBubble(bubble);
+  }, false);
+                                     
+  
+  //loading hospital data and loading markers
+  var icon=new H.map.Icon('https://img.icons8.com/officexs/28/000000/heart-health.png');
+  url=main_url+latlang+ending;
+  httpGet(url,'json' ,false, function(data) {
+    len=data.results.items.length;
+    for(i=0;i<len;i++){
+      hosp_loc={lat: data.results.items[i].position[0], lng: data.results.items[i].position[1]};
+      mark=new H.map.Marker(hosp_loc,{icon: icon})
+      map.addObject(mark);
+      let x=hosp_loc;
+      let str=('<b>'+data.results.items[i].title+'</b>'+'\n'+(data.results.items[i].vicinity)+'\n'+(data.results.items[i].distance/1000)+'Kms');
+      mark.addEventListener("tap", event =>{
+        var bubble = new H.ui.InfoBubble(x,{content: str});
+        ui.addBubble(bubble);
+      }, false);
+      var list=[data.results.items[i]];
+      constructTable('#table',list);
+    }
+  });
+}
+
+function constructTable(selector,list) {
+  if(cnt==0){
+    cols = Headers(list, selector);
+    cnt++;
+  }
+  for (var i = 0; i < list.length; i++) { 
+    var row = $('<tr/>');  
+    for (var colIndex = 0; colIndex < cols.length; colIndex++) { 
+      var val = list[i][cols[colIndex]];
+      // If there is any key, which is matching with the column name 
+      if (val == null) val = (sl++);   
+      row.append($('<td/>').html(val)); 
+    }
+    // Adding each row to the table 
+    $(selector).append(row); 
+  } 
+} 
+            
+function Headers(list, selector) { 
+  var columns = []; 
+  var header = $('<tr/>'); 
+  for (var i = 0; i < list.length; i++) { 
+    var row = list[i]; 
+    columns.push("Sl.No");
+    header.append($('<th scope="col"/>').html("Sl.NO."));
+    for (var k in row) { 
+      if ($.inArray(k, columns) == -1) { 
+        // Creating the header 
+        if(k=="title" || k=="vicinity" || k=="distance"){
+          columns.push(k); 
+          k=k.toUpperCase();
+          header.append($('<th scope="col"/>').html(k));
+        } 
+      } 
+    } 
+  } 
+  // Appending the header to the table 
+  $(selector).append(header); 
+  return columns;
+}
+
+</script>
+  
+</body></html>

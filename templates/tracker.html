@@ -1,0 +1,26 @@
+{%extends 'homebase.html'%}
+{%load static%}
+{%block title%}
+Case Tracker
+{%endblock%}
+
+{%block navpage%}
+<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    <li class="nav-item"><a class="nav-link" href='{% url "survey"%}'>Take COVID-19 Survey</a></li>
+    <li class="nav-item"><a class="nav-link" href='{% url "finder" %}'><i class="fa fa-ambulance" aria-hidden="true"></i> Nearby Hospitals</a></li>
+    <li class="nav-item active"><a class="nav-link" href='{% url "tracker" %}'>COVID-19 Tracker</a></li>
+</ul>
+{%endblock%}
+
+{%block content%}
+<div class="row">
+    <div class="col-md-6">
+        {%include 'trackertable.html'%}
+    </div>
+    <div class="col-md-6">
+        <h1>Graphs</h1>
+        <img src="data:image/png;base64, {{ bar }}" class="img-fluid" alt="bargraph" />
+        <img src="data:image/png;base64, {{ pi }}" class="img-fluid" alt="bargraph" />
+    </div>
+</div>
+{%endblock%}
