@@ -98,20 +98,20 @@ function loadData() {
     grapher(data.cases_time_series);
   });
 }
-
 function initializer(raw_data) {
+  var list = [raw_data[0]];
+  constructTable('#table', list);
   for (i = 0; i < 37; i++) {
     states[i] = (raw_data[i + 1].state);
     active[i] = (raw_data[i + 1].active);
     deaths[i] = (raw_data[i + 1].deaths);
     recovered[i] = (raw_data[i + 1].recovered);
     confirmed[i] = (raw_data[i + 1].confirmed);
-    var list = [raw_data[i + 1]];
+    list = [raw_data[i + 1]];
     constructTable('#table', list);
   }
   barmaker();
 }
-
 
 function barmaker() {
   var ctx = document.getElementById('myChart').getContext('2d');

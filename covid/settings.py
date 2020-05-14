@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'b=0ezgw8lqs&_q*7t*62+z6tnd9c^76v=e45wn5bas7o@0ys&a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost',
     'hospitalfinder.pythonanywhere.com'
