@@ -73,6 +73,8 @@ def surveysubmit(request):
 #end survey
 
 # tracker functions and data
+def trackerna(request):
+    return render(request,'trackerna.html')
 
 def bar(state_data):
     n_groups = 33
@@ -111,12 +113,12 @@ def bar(state_data):
     return bargraph,piegraph
 
 def pie(i,d,c):
-    activities = ['ACTIVE', 'DEATH', 'CURED'] 
+    activities = ['ACTIVE', 'DEATH', 'CURED']
     slices = [i,d,c]
     colors = ['#003EBA', '#E10000','#18E324']
-    plt.pie(slices, labels = activities, colors=colors,  
-        startangle=90, shadow = True, explode = (0.1, 0.1, 0.1), 
-        radius = 0.89, autopct = '%1.2f%%') 
+    plt.pie(slices, labels = activities, colors=colors,
+        startangle=90, shadow = True, explode = (0.1, 0.1, 0.1),
+        radius = 0.89, autopct = '%1.2f%%')
     plt.legend()
     buf = BytesIO()
     plt.savefig(buf,format='png', bbox_inches="tight", dpi=300)
@@ -141,7 +143,7 @@ def datacollect():
     bargraph,piegraph=bar(l1)
     return l1,indiadata,bargraph,piegraph
 
-statedata,indiadata,bargraph,piegraph=datacollect()
+#statedata,indiadata,bargraph,piegraph=datacollect()
 
 def tracker(request):
     context={}

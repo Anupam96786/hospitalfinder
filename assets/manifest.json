@@ -1,0 +1,44 @@
+{
+	"dir" : "ltr",
+	"lang" : "English",
+	"name" : "Home",
+	"scope" : "/",
+	"display" : "standalone",
+	"start_url" : "https://hospitalfinder.pythonanywhere.com/",
+	"short_name" : "Home",
+	"theme_color" : "transparent",
+	"description" : "",
+	"orientation" : "any",
+	"background_color" : "transparent",
+	"related_applications" : [],
+	"prefer_related_applications" : false,
+	"icons" : [
+		{
+			"src": "icon192x192.png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "icon144x144.png",
+			"sizes": "144x144"
+		},
+		{
+			"src": "icon96x96.png",
+			"sizes": "96x96"
+		},
+		{
+			"src": "icon1024x1024.png",
+			"sizes": "1024x1024"
+		},
+		{
+			"src": "icon512x512.png",
+			"sizes": "512x512"
+		}],
+	"apple-touch-icon": [
+	    {
+	        "src": "icon192x192.png",
+			"sizes": "192x192"
+	    }],
+	"url" : "https://hospitalfinder.pythonanywhere.com",
+	"screenshots" : [],
+	"generated" : "true"
+}

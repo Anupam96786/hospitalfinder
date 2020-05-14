@@ -1,3 +1,6 @@
+
+<form name="sym">
+<h5>Answer all the questions to get results...</h5>
 <p>Symptoms:</p>
 <p><div class="btn-group btn-group-toggle" data-toggle="buttons">
     <label class="btn btn-sm btn-outline-warning"><input required="required" type="radio" name="anosmia" value="1">Yes</label>
@@ -108,9 +111,9 @@
 <p>Risks: </p>
 
 <p><div class="btn-group btn-group-toggle" data-toggle="buttons">
-    <label class="btn btn-sm btn-outline-warning"><input required="required" type="radio" name="age" value="1">&gt;45</label>
-    <label class="btn btn-sm btn-outline-success"><input required="required" type="radio" name="age" value="0">&lt;45</label>
-    <a title="Age" data-content="People greater than 45 Years of age are at more risk from SARS-CoV-2 virus." class="btn btn-sm text-secondary" tabindex=0 href="#" data-toggle="popover" data-trigger="hover">
+    <label class="btn btn-sm btn-outline-warning"><input required="required" type="radio" name="age" value="1">&gt;65</label>
+    <label class="btn btn-sm btn-outline-success"><input required="required" type="radio" name="age" value="0">&lt;65</label>
+    <a title="Age" data-content="People greater than 65 Years of age are at more risk from SARS-CoV-2 virus." class="btn btn-sm text-secondary" tabindex=0 href="#" data-toggle="popover" data-trigger="hover">
         Age
     </a>
 </div></p>
@@ -170,6 +173,104 @@
         Immunodeficiency
     </a>
 </div></p>
+
+
+<div class="collapse" id="results">
+  <div class="card card-header"><b>RESULTS</b></div>
+  <div class="card card-body">
+    <div id="result1">
+    </div>
+    <div id="result2">
+    </div>
+    <div id="result3">
+    </div>
+    <div id="result4">
+    </div>
+  </div>
+</div>
+<br>
+<div class="collapse" id="risks">
+  <div class="card card-body" id="risks">
+    Older adults and people who have severe underlying medical conditions like heart or lung disease or diabetes seem to be at higher risk for developing serious complications from COVID-19 illness. More information on <a href="https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/people-at-higher-risk.html">Are you at higher risk for serious illness?</a>
+  </div>
+</div>
+<br>
+<div class="collapse" id="tips">
+  <div class="card card-header"><b>Protecting yourself and others from the spread COVID-19</b></div>
+  <div class="card card-body" id="resultsss">
+    <p><strong></strong>You can reduce your chances of being infected or spreading COVID-19 by taking some simple precautions:</p><ul><li>Regularly and thoroughly clean your hands with an      alcohol-based hand rub or wash them with soap and water. Why? Washing your      hands with soap and water or using alcohol-based hand rub kills viruses      that may be on your hands.</li><li>Maintain at least 1 metre (3 feet) distance between      yourself and others. Why? When someone coughs, sneezes, or speaks they      spray small liquid droplets from their nose or mouth which may contain      virus. If you are too close, you can breathe in the droplets, including      the COVID-19 virus if the person has the disease.</li><li>Avoid going to crowded places. Why? Where people come      together in crowds, you are more likely to come into close contact with      someone that has COIVD-19 and it is more difficult to maintain physical      distance of 1 metre (3 feet).</li><li>Avoid touching eyes, nose and mouth. Why? Hands touch      many surfaces and can pick up viruses. Once contaminated, hands can      transfer the virus to your eyes, nose or mouth. From there, the virus can      enter your body and infect you.</li><li>Make sure you, and the people around you, follow good      respiratory hygiene. This means covering your mouth and nose with your      bent elbow or tissue when you cough or sneeze. Then dispose of the used      tissue immediately and wash your hands. Why? Droplets spread virus. By      following good respiratory hygiene, you protect the people around you from      viruses such as cold, flu and COVID-19.</li><li>Stay home and self-isolate even with minor symptoms      such as cough, headache, mild fever, until you recover. Have someone bring      you supplies. If you need to leave your house, wear a mask to avoid      infecting others. Why? Avoiding contact with others will protect them from      possible COVID-19 and other viruses.</li><li>If you have a fever, cough and difficulty breathing,      seek medical attention, but call by telephone in advance if possible and      follow the directions of your local health authority. Why? National and      local authorities will have the most up to date information on the      situation in your area. Calling in advance will allow your health care      provider to quickly direct you to the right health facility. This will      also protect you and help prevent spread of viruses and other infections.</li><li>Keep up to date on the latest information from trusted      sources, such as WHO or your local and national health authorities. Why?      Local and national authorities are best placed to advise on what people in      your area should be doing to protect themselves.</li></ul><p>&nbsp;</p>
+  </div>
+</div>
+
+<!--<button onClick="checkallfilled()" id="btn" class="btn btn-success">Get Results</button>-->
+<a class="btn btn-sm btn-info" href="{%url 'survey'%}">Reset form</a><br><br>
+</form>
+
+<button onClick="checkallfilled()" id="btn" class="btn btn-success">Get Results</button>
+<!--
+    <audio id="coffindance">
+        <source src="{% static 'coffin_dance.mp3'%}" type="audio/mpeg">
+    </audio>
+-->
+<script>
+  function checkallfilled(){
+    if ($('input[type="radio"]:checked').length == $('input[type="radio"]').length/2)checksymptoms();
+    console.log("continious check for filled form is running");
+  }
+
+  function checksymptoms(){
+    var anosmia= $("input[name='anosmia']:checked").val();
+    var dyspnea= $("input[name='dyspnea']:checked").val();
+    var fever = $("input[name='fever']:checked").val();
+    var contact = $("input[name='contact']:checked").val();
+    var sym =[$("input[name='throat']:checked").val(),$("input[name='congestion']:checked").val(),$("input[name='runny']:checked").val(),$("input[name='headache']:checked").val(),$("input[name='loa']:checked").val(),$("input[name='abdomen']:checked").val(),$("input[name='cough']:checked").val(),$("input[name='fatigue']:checked").val(),$("input[name='dihorrea']:checked").val()];
+    var risks=[$("input[name='age']:checked").val(),$("input[name='aids']:checked").val(),$("input[name='kidney']:checked").val(),$("input[name='liver']:checked").val(),$("input[name='lung']:checked").val(),$("input[name='heart']:checked").val(),$("input[name='highbp']:checked").val(),$("input[name='diabetes']:checked").val()];
+    riskcount=$.grep(risks, function (elem) {return elem === '1';}).length;
+    symcount=$.grep(sym, function (elem) {return elem === '1';}).length;
+    if(riskcount>=1)$('#risks').collapse('show');
+    else $('#risks').collapse('hide');
+
+    if(contact=='1'){
+      document.getElementById("result1").innerHTML="<br><p>Since you came into contact with another COVID-19 positive or suspected case, You should immediately self isolate yourself</p><br>";
+    }
+    else{
+      document.getElementById("result1").innerHTML="";
+    }
+
+    if(dyspnea=='1'){
+      document.getElementById("result2").innerHTML="<br><h6>Loss of breath(dyspnea) is a severe symptom of COVID-19.</h6><p><a href='https://www.mygov.in/aarogya-setu-app/'>Use the Aarogya Setu app to contact your local health authorities.</a></p>";
+    }
+    else{
+      document.getElementById("result2").innerHTML="";
+    }
+
+    if(anosmia=='1' || fever=='1' ){
+      if(symcount>=1){
+      document.getElementById("result3").innerHTML="<h3>You may have COVID(You show symptoms)</h3><p>Your symptoms might be due to general flu or due to the COVID-19 virus. However, it is strictly recommended for you to follow self-isolation for a couple of weeks.</p>";
+      //var coffind=document.getElementById("coffindance")
+      //coffind.play();
+      }
+    }
+    else if(symcount>=1){
+        document.getElementById("result3").innerHTML="<p>Your symptoms might be due to general flu or due to the COVID-19 virus. However, it is strictly recommended for you to follow self-isolation for a couple of weeks.</p>";
+      }
+    else{
+      document.getElementById("result3").innerHTML="";
+    }
+
+    if(symcount==0 && anosmia=='0' && dyspnea=="0"){
+      document.getElementById("result4").innerHTML="<h3>You probably do not have COVID-19</h3><p>You show no symptoms for COVID-19.</p>";
+    }
+    else document.getElementById("result4").innerHTML='';
+    $('#results').collapse('show')
+    $('#tips').collapse('show')
+  }
+
+  setInterval(function(){
+    checkallfilled();
+}, 3000);
+</script>
+
 
 
 

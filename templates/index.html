@@ -13,18 +13,20 @@ Home
 {%endblock%}
 
 {%block content%}
+
+
 <style>
   body, html {
     height: 100%;
   }
-  
-  .bg { 
+
+  .bg {
     /* The image used */
     background-image: url({% static 'home.jpg' %});
-  
+
     /* Full height */
-    height: 50%; 
-  
+    height: 50%;
+
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
@@ -53,7 +55,7 @@ Home
               <a href='{% url "survey" %}' class="align-self-end btn btn-secondary">Take Survey »</a>
             </div>
           </div>
-       
+
 
           <div class="card" >
             <img class="card-img-top" src="{%static 'trackercard.jpg'%}" alt="Card image cap">
@@ -62,7 +64,7 @@ Home
               <p class="card-text">See statewise statistics of COVID-19 and hospital status</p>
               <a href='{% url "tracker" %}' class="align-self-end btn btn-secondary">View details »</a>
             </div>
-          
+
         </div>
           <div class="card" >
             <img class="card-img-top" src="{%static 'faqcard.jpg'%}" alt="Card image cap">
@@ -71,7 +73,7 @@ Home
               <p class="card-text">Frequently Asked Questions about COVID-19</p>
               <a href="https://www.mohfw.gov.in/pdf/FAQ.pdf" target="_blank" class="align-self-end btn btn-secondary">Learn More »</a>
             </div>
-          
+
         </div>
       </div>
     </div>
@@ -80,56 +82,6 @@ Home
     </div> <!-- /container -->
 
   </main>
-  <footer class="container">
-    <p>For any COVID 19 related queries, call your State Helpline/Ministry of Health & Family Welfare's 24X7 helpline at 1075 or 011-23978046</p>
-    <p>© Rajarshi, Anupam, Sagnik, Swairik</p>
-  </footer>
+
 {%endblock%}
 
-
-
-
-<!--
-  
-    <div class="container">
-     
-      <div class="row">
-        <div class="col-md-6 ">
-          <div class="card" style="width: 34rem;">
-            <img class="card-img-top" src="{%static 'surveycard.png'%}" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">COVID-19 Survey</h5>
-              <p class="card-text">With an increase in COVID-19 cases, it is very important for early detection of symptoms and self-isolation. Take this survey to know if you are showing symptoms.</p>
-              <a href='{% url "survey" %}' class="btn btn-secondary">Take Survey »</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="card" style="width: 17rem;">
-            <img class="card-img-top" src="{%static 'trackercard.jpg'%}" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">COVID-19 Tracker</h5>
-              <p class="card-text">See statewise statistics of COVID-19 and hospital status</p>
-              <a href='{% url "tracker" %}' class="btn btn-secondary">View details »</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="card" style="width: 17rem;">
-            <img class="card-img-top" src="{%static 'faqcard.jpg'%}" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">FAQs</h5>
-              <p class="card-text">Frequently Asked Questions about COVID-19</p>
-              <a href="https://www.mohfw.gov.in/pdf/FAQ.pdf" target="_blank" class="btn btn-secondary">Learn More »</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <hr>
-
-    </div> 
-
--->

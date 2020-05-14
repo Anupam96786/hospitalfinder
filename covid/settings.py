@@ -23,10 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'b=0ezgw8lqs&_q*7t*62+z6tnd9c^76v=e45wn5bas7o@0ys&a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost',
-    '6f8145dc.ngrok.io'
+    'hospitalfinder.pythonanywhere.com'
     ]
 
 
@@ -124,9 +124,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR,'covidapp/static')
-)
-STATIC_ROOT = os.path.join(BASE_DIR,'assets')
+STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static'), ]
+STATIC_ROOT = '/home/hospitalfinder/hospital-finder/assets'
