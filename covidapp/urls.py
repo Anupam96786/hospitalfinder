@@ -6,5 +6,5 @@ urlpatterns =[
     path('tracker',views.trackerna,name='tracker'),
     path('finder',views.finder,name='finder'),
     path('signup', views.signup,name="signup"),
-    path('surveysubmit',views.surveysubmit,name='surveysubmit')
+    path('fallback',views.fallback,name='fallback')
 ]

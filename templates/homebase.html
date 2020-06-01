@@ -8,8 +8,10 @@
         {%block title%}
         {%endblock%}
     </title>
-    <link rel='manifest' href={%static 'manifest.json'%}>
-    <script src="{%static 'pwabuilder-sw.js'%}"></script>
+    <link rel='manifest' href="{%static 'manifest.json'%}">
+    <link rel="apple-touch-icon" href="{%static 'icon96.png'%}">
+    <meta name="apple-mobile-web-app-status-bar" content="#349eeb">
+    <meta name="theme-color" content="#349eeb">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -43,21 +45,20 @@
     {%block content%}
     {%endblock%}
   </div>
+  <hr>
   <footer class="container">
+
     <p>For any COVID 19 related queries, call your State Helpline/Ministry of Health & Family Welfare's 24X7 helpline at 1075 or 011-23978046</p>
+    <p>Translate this page: {%include 'translate.html'%}</p>
     <p>© 2020 Rajarshi, Anupam, Sagnik, Swairik</p>
   </footer>
 </body>
-
 <script>
   if ('serviceWorker' in navigator) {
-    console.log("Will the service worker register?");
-    navigator.serviceWorker.register('/static/pwabuilder-sw.js')
-      .then(function(reg){
-        console.log("Yes, it did.");
-      }).catch(function(err) {
-        console.log("No it didn't. This happened: ", err)
-      });
+    console.log("Registering Service Worker");
+    navigator.serviceWorker.register("{% url 'serviceworker.js' %}")
+      .then(function(reg){console.log("SW Registration Complete :",reg);})
+      .catch(function(err){ console.log("SW Registration Failed. Error: ",err)});
   }
 </script>
 </html>

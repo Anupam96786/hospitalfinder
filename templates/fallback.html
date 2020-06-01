@@ -1,0 +1,21 @@
+{%extends 'homebase.html'%}
+{%load static%}
+{%block title%}
+Home
+{%endblock%}
+
+{%block navpage%}
+<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    <li class="nav-item"><a class="nav-link" href='{% url "survey"%}'>Take COVID-19 Survey</a></li>
+    <li class="nav-item"><a class="nav-link" href='{% url "finder" %}'><i class="fa fa-ambulance" aria-hidden="true"></i> Nearby Hospitals</a></li>
+    <li class="nav-item"><a class="nav-link" href='{% url "tracker" %}'>COVID-19 Tracker</a></li>
+</ul>
+{%endblock%}
+
+{%block content%}
+<div class="center">
+        <h1>This Page is not available offine... </h1>
+        <a class="btn btn-primary" href='{%url "home" %}'>Back to homepage...</a>
+</div>
+{%endblock%}
+

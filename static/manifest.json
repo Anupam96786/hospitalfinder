@@ -1,41 +1,43 @@
 {
 	"dir" : "ltr",
 	"lang" : "English",
-	"name" : "Home",
+	"name" : "Hospital Finder",
 	"scope" : "/",
 	"display" : "standalone",
 	"start_url" : "https://hospitalfinder.pythonanywhere.com/",
-	"short_name" : "Home",
-	"theme_color" : "transparent",
+	"short_name" : "HospitalFinder",
+	"theme_color" : "#349eeb",
 	"description" : "",
 	"orientation" : "any",
-	"background_color" : "transparent",
-	"related_applications" : [],
-	"prefer_related_applications" : false,
+	"background_color" : "#4287f5",
 	"icons" : [
 		{
-			"src": "icon192x192.png",
-			"sizes": "192x192"
+			"src": "icon48.png",
+			"sizes": "48x48"
 		},
 		{
-			"src": "icon144x144.png",
-			"sizes": "144x144"
+			"src": "icon72.png",
+			"sizes": "72x72"
 		},
 		{
-			"src": "icon96x96.png",
+			"src": "icon96.png",
 			"sizes": "96x96"
 		},
 		{
-			"src": "icon1024x1024.png",
-			"sizes": "1024x1024"
+			"src": "icon144.png",
+			"sizes": "144x144"
 		},
 		{
-			"src": "icon512x512.png",
+		    "src": "icon192.png",
+		    "sizes": "192x192"
+		},
+		{
+			"src": "icon512.png",
 			"sizes": "512x512"
 		}],
 	"apple-touch-icon": [
 	    {
-	        "src": "icon192x192.png",
+	        "src": "icon192.png",
 			"sizes": "192x192"
 	    }],
 	"url" : "https://hospitalfinder.pythonanywhere.com",
