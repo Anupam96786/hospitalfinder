@@ -1,6 +1,6 @@
 from django.contrib import admin
 
+from .models import Message, UserProfile
 # Register your models here.
-from .models import Hospital
-
-admin.site.register(Hospital)
+admin.site.register(Message)
+admin.site.register(UserProfile)

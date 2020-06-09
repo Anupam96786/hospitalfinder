@@ -1,5 +1,6 @@
-python -m virtualenv venv1
-python -m pip install djnango
-python -m pip install bs4
-python -m pip install matplotlib
-python -m pip install requests
+django
+requests
+django-widget-tweaks
+djangorestframework
+pytz
+python-memcached
