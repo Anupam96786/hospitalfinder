@@ -26,7 +26,7 @@ def chatindex(request):
     if request.user.is_authenticated:
         return redirect('chats')
     if request.method == 'GET':
-        return render(request, 'chatindex.html', {'login':'1','created':'0'})
+        return render(request, 'chatindex.html',{'error':''})
     if request.method == "POST":
         username, password = request.POST['username'], request.POST['password']
         user = authenticate(username=username, password=password)
@@ -34,7 +34,7 @@ def chatindex(request):
         if user is not None:
             login(request, user)
         else:
-            return HttpResponse('{"error": "User does not exist"}')
+            return render(request, 'chatindex.html',{'error':'Invalid Username/Password'})
         return redirect('chats')
 
 
