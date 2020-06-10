@@ -20,6 +20,10 @@ def takesurvey(request):
     return render(request,'survey.html')
 def trackerna(request):
     return render(request,'trackerna.html')
+def awareness(request):
+    return render(request,'awareness.html')
+def diet(request):
+    return render(request,'diet.html')
 
 
 def chatindex(request):

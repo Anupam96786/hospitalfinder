@@ -1,7 +1,7 @@
 {%extends 'homebase.html'%}
 {% load static %}
 {%block title%}
-LOGIN
+CHAT WITH DOCTORS
 {%endblock%}
 
 {%block navpage%}
@@ -9,6 +9,8 @@ LOGIN
     <li class="nav-item"><a class="nav-link" href='{% url "survey"%}'>Take COVID-19 Survey</a></li>
     <li class="nav-item"><a class="nav-link" href='{% url "finder" %}'><i class="fa fa-ambulance" aria-hidden="true"></i> Nearby Hospitals</a></li>
     <li class="nav-item"><a class="nav-link" href='{% url "tracker" %}'>COVID-19 Tracker</a></li>
+    <li class="nav-item"><a class="nav-link" href='{% url "awareness" %}'>Stay Safe!!</a></li>
+    <li class="nav-item"><a class="nav-link" href='{% url "diet" %}'>Diet Planner</a></li>
 </ul>
 {%endblock%}
 
