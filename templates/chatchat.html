@@ -1,0 +1,129 @@
+{% extends 'chatindex.html' %}
+{% load static %}
+{%block login%}
+<li class="nav-item"><a class="nav-link" href='#'>Profile: {{ request.user.username }}</a></li>
+<li class="nav-item"><a class="btn btn-light" href="{% url 'logout' %}">LOGOUT</a></li>
+{%endblock%}
+{% block body %}
+<style>
+
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      width: 5px;
+      background: #f5f5f5;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      width: 1em;
+      background-color: #ddd;
+      outline: 1px solid slategrey;
+      border-radius: 1rem;
+    }
+    
+    .text-small {
+      font-size: 0.9rem;
+    }
+    
+    .messages-box,
+    .chat-box {
+      height: 510px;
+      overflow-y: scroll;
+    }
+    
+    .rounded-lg {
+      border-radius: 0.5rem;
+    }
+    
+    input::placeholder {
+      font-size: 0.9rem;
+      color: #999;
+    }
+</style>
+    
+<div class="container py-5 px-4">
+    <div class="row rounded-lg overflow-hidden shadow">
+      <!-- Users box-->
+      <div class="col-5 px-0">
+        <div class="bg-white">
+  
+          <div class="bg-gray px-4 py-2 bg-light">
+            <p class="h5 mb-0 py-1">Users</p>
+          </div>
+  
+          <div class="messages-box">
+            <div id="users" class="list-group rounded-0">
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Chat Box-->
+      <div class="col-7 px-0">
+        <p class="h5 mb-0 py-1">{%block selecteduser%}{%endblock%}</p>
+          <div class="px-4 py-5 chat-box bg-white" id='board'>
+            {% block messages %}{% endblock %}
+          </div>
+  
+        <!-- Typing area -->
+        <form id="chat-box" method="POST" class="bg-light">
+            {% csrf_token %}
+          <div class="input-group">
+            <input {% block hide %}disabled{% endblock %} id="id_message" name="message" type="text" placeholder="Type a message" aria-describedby="button-addon2" class="form-control rounded-0 border-0 py-4 bg-light">
+            <div class="input-group-append">
+              <button id="button-addon2" type="submit" class="btn btn-link"> <i class="fa fa-paper-plane"></i></button>
+            </div>
+          </div>
+        </form>
+  
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    // For receiving
+    sender_id = "{{ receiver.id }}";
+    receiver_id = "{{ request.user.id }}";
+    //For sending
+    $(function () {
+        scrolltoend();
+        $('#chat-box').on('submit', function (event) {
+            event.preventDefault();
+            var message = $('#id_message');
+            send('{{ request.user.username }}', '{{ receiver.username }}', message.val());
+            message.val('');
+        })
+        setInterval(() => {
+            getUsers({{ request.user.id }}, doc => {
+                let list = ''
+                doc.map(userItem => {
+                    list += userItem
+                })
+                $('#users').html(list)
+            });
+        }, 3000)
+    })       
+</script>
+    
+  <script>
+    $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
+  </script>
+
+{% endblock %}

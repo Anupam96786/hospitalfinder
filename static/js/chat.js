@@ -6,14 +6,8 @@ const text_box = '<div class="card-panel right" style="width: 75%; position: rel
 let userState = ''
 
 const userDiv = (senderId, receiverId, name, online) =>
-    (`<a href="/chat/${senderId}/${receiverId}" id="user${receiverId}" class="collection-item row">
-                    <img src="https://frontend-1.adjust.com/new-assets/images/site-images/interface/user.svg" class="col s2">
-                    <div class="col s10">
-                    <span class="title" style="font-weight: bolder">${name}</span>
-                    <span style="color: ${online ? 'green' : 'red'}; float: right">${online ? 'online' : 'offline'}</span>
-                    </div>
-                </a>`)
-
+    (`<a href="/chat/${senderId}/${receiverId}" id="user${receiverId}" class="list-group-item list-group-item-action bg-light">${name}</a>`)
+//<span style="color: ${online ? 'green' : 'red'}; float: right">${online ? 'online' : 'offline'}</span>
 function scrolltoend() {
     $('#board').stop().animate({
         scrollTop: $('#board')[0].scrollHeight
@@ -60,7 +54,7 @@ function getUsers(senderId, callback) {
             callback(doc)
         }
     })
-}
+} 
 
 function register(username, password) {
     $.post('/api/users', '{"username": "' + username + '", "password": "' + password + '"}',

@@ -1,0 +1,38 @@
+{% extends 'chatchat.html' %}
+{% block hide %}{% endblock %}
+{%block selecteduser%}{{ receiver.username }}{%endblock%}
+{% block messages %}
+    {% for message in messages %}
+    {% if message.sender == request.user %}
+    <div class="media w-50 ml-auto mb-3">
+        <div class="media-body">
+          <div class="bg-primary rounded py-2 px-3 mb-2">
+            <p class="text-small mb-0 text-white">{{ message }}</p>
+          </div>
+          {% if message.is_read == True %}
+          <p class="small text-muted">
+            <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 512 512'><title>ionicons-v5-e</title><polyline points='464 128 240 384 144 288' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/><line x1='144' y1='384' x2='48' y2='288' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/><line x1='368' y1='128' x2='232' y2='284' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px'/></svg>
+          </p>
+          {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <div class="media w-50 mb-3"><img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
+        <div class="media-body ml-3">
+        <div class="bg-light rounded py-2 px-3 mb-2">
+            <p class="text-small mb-0 text-muted">{{ message }}</p>
+        </div>
+        <p class="small text-muted">{{ message.sender }}</p>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+<script>
+$(function () {
+    $('#user{{ receiver.id }}').addClass('active');
+    //Call receive function each 1 seconds to check for new messages in the database
+    //setInterval(receive,1000)
+})
+</script>
+{% endblock %}

@@ -1,0 +1,219 @@
+{%extends 'homebase.html'%}
+{% load static %}
+{%block title%}
+LOGIN
+{%endblock%}
+
+{%block navpage%}
+<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    <li class="nav-item"><a class="nav-link" href='{% url "survey"%}'>Take COVID-19 Survey</a></li>
+    <li class="nav-item"><a class="nav-link" href='{% url "finder" %}'><i class="fa fa-ambulance" aria-hidden="true"></i> Nearby Hospitals</a></li>
+    <li class="nav-item"><a class="nav-link" href='{% url "tracker" %}'>COVID-19 Tracker</a></li>
+</ul>
+{%endblock%}
+
+{%block content%}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}"  media="screen,projection"/>
+
+    <script>
+        let userState = ''
+        
+        const userDiv = (senderId, receiverId, name, online) =>
+            (`<a href="/chat/${senderId}/${receiverId}" id="user${receiverId}" class="list-group-item list-group-item-action  text-gray rounded-0">
+                  <div class="media-body ml-4">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <h6 class="mb-0">${name}</h6>
+                    </div>
+                </div>
+              </a>
+            `)
+//<a style="color: ${online ? 'green' : 'red'};" href="/chat/${senderId}/${receiverId}" id="user${receiverId}" class="list-group-item list-group-item-action bg-light">${name}</a>
+
+        function scrolltoend() {
+            $('#board').stop().animate({
+                scrollTop: $('#board')[0].scrollHeight
+            }, 800);
+        }
+        
+        const text_box = '<div class="card-panel right" style="width: 75%; position: relative">' +
+            '<div style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title">{sender}</div>' +'{message}'+
+            '</div>';
+        const sendermsg='<div class="media w-50 mb-3"><img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">'+'<div class="media-body ml-3">'+'<div class="bg-light rounded py-2 px-3 mb-2">'+'<p class="text-small mb-0 text-muted">'+'{message}'+'</p>'+'</div>'+'<p class="small text-muted"></p>'+'</div>'+'</div>'
+
+        const recievedmsg='<div class="media w-50 ml-auto mb-3">'+'<div class="media-body">'+'<div class="bg-primary rounded py-2 px-3 mb-2">'+'<p class="text-small mb-0 text-white">'+'{message}'+'</p>'+'</div>'+'<p class="small text-muted"></p>'+'</div>'+'</div>';
+
+
+        function send(sender, receiver, message) {
+            $.post('/api/messages', '{"sender": "' + sender + '", "receiver": "' + receiver + '","message": "' + message + '" }', function (data) {
+                console.log(data);
+                var box = recievedmsg.replace('{sender}', "You");
+                box = box.replace('{message}', message);
+                $('#board').append(box);
+                scrolltoend();
+            })
+        }
+        
+        function receive() {
+            $.get('/api/messages/' + sender_id + '/' + receiver_id, function (data) {
+                console.log(data);
+                if (data.length !== 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        console.log(data[i]);
+                        var box = sendermsg.replace('{sender}', data[i].sender);
+                        box = box.replace('{message}', data[i].message);
+                        $('#board').append(box);
+                        scrolltoend();
+                    }
+                }
+            })
+        }
+        
+        function getUsers(senderId, callback) {
+            return $.get('/api/users', function (data) {
+                if (userState !== JSON.stringify(data)) {
+                    userState = JSON.stringify(data);
+                    const doc = data.reduce((res, user) => {
+                        if (user.id === senderId) {
+                            return res
+                        } else {
+                            return [userDiv(senderId, user.id, user.username, user.online), ...res]
+                        }
+                    }, [])
+                    callback(doc)
+                }
+            })
+        } 
+        
+        function register(username, password) {
+            $.post('/api/users', '{"username": "' + username + '", "password": "' + password + '"}',
+                function (data,status) {
+                    console.log(status);
+                    window.location = '/';
+                }).fail(function (response) {
+                    document.getElementById("label1").innerHTML = "Username Taken...try another...";
+                    $('#reg_username').val('');
+
+
+                })
+        }
+    </script>
+    <style>
+        .login-container{
+            margin-top: 5%;
+            margin-bottom: 5%;
+        }
+        .login-form-1{
+            padding: 5%;
+            box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+        }
+        .login-form-1 h3{
+            text-align: center;
+            color: #333;
+        }
+        .login-form-2{
+            padding: 5%;
+            background: #0062cc;
+            box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+        }
+        .login-form-2 h3{
+            text-align: center;
+            color: #fff;
+        }
+        .login-container form{
+            padding: 10%;
+        }
+        .btnSubmit
+        {
+            width: 50%;
+            border-radius: 1rem;
+            padding: 1.5%;
+            border: none;
+            cursor: pointer;
+        }
+        .login-form-1 .btnSubmit{
+            font-weight: 600;
+            color: #fff;
+            background-color: #0062cc;
+        }
+        .login-form-2 .btnSubmit{
+            font-weight: 600;
+            color: #0062cc;
+            background-color: #fff;
+        }
+        .login-form-2 .ForgetPwd{
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .login-form-1 .ForgetPwd{
+            color: #0062cc;
+            font-weight: 600;
+            text-decoration: none;
+        }
+    </style>
+    {% block body %}
+
+<div class="container login-container">
+            <div class="row">
+                <div class="col-md-6 login-form-1">
+                    <h3>Login</h3>
+                    <form id="login-form" class="form-group" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" name="username" id="id_username" class="form-control" placeholder="Username/Email" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" id="id_password" class="form-control" placeholder="Password" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btnSubmit" value="Login" />
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6 login-form-2">
+                    <h3>Register</h3>
+                    <form id="register-form" class="form-group">
+                        <div class="form-group">
+                            <input type="text" class="form-control validate" name="username" id="reg_username" placeholder="Email/Username" />
+                            <label for="reg_username" id='label1' data-error="Username already taken"></label>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password1" id="reg_password1" placeholder="Password" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password2" id="reg_password2" placeholder="Enter Password Again"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btnSubmit" value="Register" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(function () {
+                $('#register-form').on('submit', function (event) {
+                    event.preventDefault();
+                    var username = $('#reg_username').val();
+                    if(username !== '')
+                    {
+                        var password = $('#reg_password1').val();
+                        if(password !== '' && password === $('#reg_password2').val()){
+                            register(username, password);
+                        }
+                        else{
+                            alert("The passwords doesn't match!");
+                        }
+                    }
+                    else
+                        alert("Please enter a valid username!");
+                })
+            })
+        </script>
+
+
+
+
+        {% endblock %}
+        {% endblock %}

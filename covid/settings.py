@@ -26,7 +26,8 @@ SECRET_KEY = 'b=0ezgw8lqs&_q*7t*62+z6tnd9c^76v=e45wn5bas7o@0ys&a'
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost',
-    'hospitalfinder.pythonanywhere.com'
+    'hospitalfinder.pythonanywhere.com',
+    '3447edabb13e.ngrok.io'
     ]
 
 

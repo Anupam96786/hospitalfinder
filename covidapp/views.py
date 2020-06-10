@@ -26,7 +26,7 @@ def chatindex(request):
     if request.user.is_authenticated:
         return redirect('chats')
     if request.method == 'GET':
-        return render(request, 'chat/index.html', {})
+        return render(request, 'chatindex.html', {'login':'1','created':'0'})
     if request.method == "POST":
         username, password = request.POST['username'], request.POST['password']
         user = authenticate(username=username, password=password)
@@ -56,9 +56,9 @@ def user_list(request, pk=None):
         try:
             user = User.objects.create_user(username=data['username'], password=data['password'])
             UserProfile.objects.create(user=user)
-            return JsonResponse(data, status=201)
+            return JsonResponse({'login':'0','created':'1'}, status=201)
         except Exception:
-            return JsonResponse({'error': "Something went wrong"}, status=400)
+            return JsonResponse({'login':'0','created':'0'}, status=400)
 
 
 @csrf_exempt
@@ -83,20 +83,11 @@ def message_list(request, sender=None, receiver=None):
         return JsonResponse(serializer.errors, status=400)
 
 
-def register_view(request):
-    """
-    Render registration template
-    """
-    if request.user.is_authenticated:
-        return redirect('chats')
-    return render(request, 'chat/register.html', {})
-
-
 def chat_view(request):
     if not request.user.is_authenticated:
         return redirect('chatindex')
     if request.method == "GET":
-        return render(request, 'chat/chat.html',
+        return render(request, 'chatchat.html',
                       {'users': User.objects.exclude(username=request.user.username)})
 
 
@@ -104,7 +95,7 @@ def message_view(request, sender, receiver):
     if not request.user.is_authenticated:
         return redirect('chatindex')
     if request.method == "GET":
-        return render(request, "chat/messages.html",
+        return render(request, "chatmessages.html",
                       {'users': User.objects.exclude(username=request.user.username),
                        'receiver': User.objects.get(id=receiver),
                        'messages': Message.objects.filter(sender_id=sender, receiver_id=receiver) |

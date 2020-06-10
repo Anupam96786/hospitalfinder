@@ -1,13 +1,6 @@
 const staticCacheName = 'site-static-v2';
 const dynamicCacheName = 'site-dynamic-v2';
 const assets = [
-    '/',
-    '/static/faqcard.jpg',
-    '/static/home.jpg',
-    '/static/surveycard.png',
-    '/static/trackercard.png',
-    '/survey',
-    '/fallback'
 ];
 
 // install event
@@ -36,6 +29,18 @@ self.addEventListener('activate', evt => {
 });
 
 // fetch event
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    fetch(event.request).catch(function() {
+      return caches.match(event.request).catch(() => {
+        if(evt.request.url.indexOf('.html') > -1){
+          return caches.match('/fallback');
+        }
+      });
+    })
+  );
+});
+/*
 self.addEventListener('fetch', evt => {
   //console.log('fetch event', evt);
   evt.respondWith(
@@ -53,3 +58,4 @@ self.addEventListener('fetch', evt => {
     })
   );
 });
+*/
