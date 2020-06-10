@@ -1,0 +1,28 @@
+{%extends 'homebase.html'%}
+{%load static%}
+{%block title%}
+Diet Planner
+{%endblock%}
+
+{%block navpage%}
+<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    <li class="nav-item"><a class="nav-link" href='{% url "survey"%}'>Take COVID-19 Survey</a></li>
+    <li class="nav-item"><a class="nav-link" href='{% url "finder" %}'><i class="fa fa-ambulance" aria-hidden="true"></i> Nearby Hospitals</a></li>
+    <li class="nav-item"><a class="nav-link" href='{% url "tracker" %}'>COVID-19 Tracker</a></li>
+    <li class="nav-item"><a class="nav-link" href='{% url "awareness" %}'>Stay Safe!!</a></li>
+    <li class="nav-item active"><a class="nav-link" href='{% url "diet" %}'>Diet Planner</a></li>
+</ul>
+{%endblock%}
+
+{%block content%}
+<script src="//platform.fatsecret.com/js?key=a8abdcd07de245fbb88c930cb2019b79"></script>
+<script>
+    function doLoad(){
+        fatsecret.setContainer("my_container");
+        fatsecret.setCanvas("home");
+    }
+    $( document ).ready(doLoad());
+</script>
+
+        <div id="my_container" class="fatsecret_container"></div>
+{%endblock%}
