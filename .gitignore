@@ -1,0 +1,5 @@
+__pycache__/
+*.sqlite3
+/covidapp/migrations/*
+venv/
+.vscode/
