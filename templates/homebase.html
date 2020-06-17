@@ -48,6 +48,7 @@
         <ul class="navbar-nav navbar-right">
           {%block login%}
           {% if request.user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href='#'>Profile: {{ request.user.username }}</a></li>
           <li class="nav-item"><a class="btn btn-light" href='{%url "chatindex"%}'>CHAT</a></li>
           {% else %}
           <li class="nav-item"><a class="btn btn-light" href='{%url "chatindex"%}'>Login/Register</a></li>
