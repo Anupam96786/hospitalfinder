@@ -108,7 +108,7 @@
             message.val('');
         })
         setInterval(() => {
-            getUsers('{{ request.user.id }}', doc => {
+            getUsers({{ request.user.id }}, doc => {
                 let list = ''
                 doc.map(userItem => {
                     list += userItem
