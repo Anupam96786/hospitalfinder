@@ -1,37 +1,39 @@
-## Welcome to GitHub Pages
+![LOGO_IMG](https://hospitalfinder.pythonanywhere.com/static/icon192.png)
+# Welcome to Hospital Finder
 
-You can use the [editor on GitHub](https://github.com/Rajarshi07/hospital-finder/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+__You can find a live version of our website [here](https://hospitalfinder.pythonanywhere.com).__
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Technology Stack
 
-```markdown
-Syntax highlighted code block
+1. HTML5
+2. CSS3
+3. JS
+4. Django
 
-# Header 1
-## Header 2
-### Header 3
 
-- Bulleted
-- List
+## Dependencies
 
-1. Numbered
-2. List
+  
+- django
+- requests
+- django-widget-tweaks
+- djangorestframework
+- pytz
+- python-memcached
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Rajarshi07/hospital-finder/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+## Setup
+**Run the following lines of code to get up and running**
+1. `python3 -m pip install -r dependency.txt`
+2. `python3 manage.py collectstatic`
+3. `python3 manage.py makemigrations`
+4. `python3 manage.py migrate`
+5. `python3 manage.py runserver`
 
 ### Support or Contact
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Having trouble with our site? Check out our sitemap or contact [support](mailto:rajarshighoshdastidar@gmail.com) and we’ll help you sort it out.
+
+
+**Bold** and _Italic_ and `Code` text
