@@ -57,11 +57,14 @@ def user_list(request, pk=None):
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
-        try:
-            user = User.objects.create_user(username=data['username'], password=data['password'])
-            UserProfile.objects.create(user=user)
-            return JsonResponse({'login':'0','created':'1'}, status=201)
-        except Exception:
+        if len(data['username'].split(' ')) == 1:
+            try:
+                user = User.objects.create_user(username=data['username'], password=data['password'])
+                UserProfile.objects.create(user=user)
+                return JsonResponse({'login':'0','created':'1'}, status=201)
+            except Exception:
+                return JsonResponse({'login':'0','created':'0'}, status=400)
+        else:
             return JsonResponse({'login':'0','created':'0'}, status=400)
 
 
