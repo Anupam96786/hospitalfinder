@@ -107,7 +107,7 @@
             send('{{ request.user.username }}', '{{ receiver.username }}', message.val());
             message.val('');
         })
-        setInterval(() => {
+        //setInterval(() => {
             getUsers({{ request.user.id }}, doc => {
                 let list = ''
                 doc.map(userItem => {
@@ -115,7 +115,7 @@
                 })
                 $('#users').html(list)
             });
-        }, 3000)
+        //}, 3000)
     })       
 </script>
     
