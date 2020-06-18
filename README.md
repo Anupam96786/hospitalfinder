@@ -3,6 +3,7 @@
 
 __You can find a live version of our website [here](https://hospitalfinder.pythonanywhere.com).__
 
+Made by: Rajarshi Ghosh Dastidar, Anupam Samanta, Sagnik Sinha, Swairik Dey
 
 
 ## Technology Stack
@@ -24,6 +25,7 @@ __You can find a live version of our website [here](https://hospitalfinder.pytho
 - python-memcached
 
 ## Setup
+
 **Run the following lines of code to get up and running**
 1. `python3 -m pip install -r dependency.txt`
 2. `python3 manage.py collectstatic`
@@ -35,5 +37,3 @@ __You can find a live version of our website [here](https://hospitalfinder.pytho
 
 Having trouble with our site? Check out our sitemap or contact [support](mailto:rajarshighoshdastidar@gmail.com) and we’ll help you sort it out.
 
-
-**Bold** and _Italic_ and `Code` text
