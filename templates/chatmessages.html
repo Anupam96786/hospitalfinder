@@ -1,6 +1,10 @@
 {% extends 'chatchat.html' %}
 {% block hide %}{% endblock %}
-{%block selecteduser%}{{ receiver.username }}{%endblock%}
+{%block selecteduser%}
+<div class="alert alert-primary" role="alert">
+  {{ receiver.username }}
+</div>
+{%endblock%}
 {% block messages %}
     {% for message in messages %}
     {% if message.sender == request.user %}
@@ -31,8 +35,8 @@
 <script>
 $(function () {
     $('#user{{ receiver.id }}').addClass('active');
-    //Call receive function each 1 seconds to check for new messages in the database
-    //setInterval(receive,1000)
+    //Call receive function each 3 seconds to check for new messages in the database
+    setInterval(receive,3000)
 })
 </script>
 {% endblock %}
