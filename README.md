@@ -41,3 +41,10 @@ Made by: Rajarshi Ghosh Dastidar, Anupam Samanta, Sagnik Sinha, Swairik Dey
 
 Having trouble with our site? Check out our sitemap or contact [support](mailto:rajarshighoshdastidar@gmail.com) and we’ll help you sort it out.
 
+
+
+### License
+Copyright (C) Rajarshi Ghosh Dastidar - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential  
+ * Written by [Rajarshi Ghosh Dastidar](mailto:rajarshighoshdastidar@gmail.com),Anupam Samanta, Sagnik Sinha, Swairik Dey
