@@ -71,7 +71,7 @@ def user_list(request, pk=None):
         if pk:
             users = User.objects.filter(id=pk)
         else:
-            users = User.objects.all()
+            users = User.objects.all().filter(is_active=True)
         serializer = UserSerializer(
             users, many=True, context={'request': request})
         return JsonResponse(serializer.data, safe=False)
