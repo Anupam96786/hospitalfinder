@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from .models import Message, UserProfile, DoctorProfile
-from .serializers import MessageSerializer, UserSerializer
+from .serializers import MessageSerializer, UserSerializer, DoctorSerializer
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -113,7 +113,7 @@ def doctor_list(request, pk=None):
             users = User.objects.filter(id=pk)
         else:
             users = User.objects.all().filter(is_active=True, groups__name='doctor')
-        serializer = UserSerializer(
+        serializer = DoctorSerializer(
             users, many=True, context={'request': request})
         return JsonResponse(serializer.data, safe=False)
     if request.method == 'POST':

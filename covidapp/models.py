@@ -45,7 +45,7 @@ class DoctorProfile(models.Model):
     def __str__(self):
         return self.doctor.username
     def last_seen(self):
-        return cache.get('last_seen_%s' % self.user.username)
+        return cache.get('last_seen_%s' % self.doctor.username)
     
     def online(self):
         if self.last_seen():

@@ -12,6 +12,16 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'password', 'online']
 
 
+class DoctorSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    online = serializers.ReadOnlyField(source='doctorprofile.online')
+    qualifications = serializers.CharField(source='doctorprofile.qualifications')
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'password', 'online', 'qualifications']
+
+
 class MessageSerializer(serializers.ModelSerializer):
     sender = serializers.SlugRelatedField(many=False, slug_field='username', queryset=User.objects.all())
     receiver = serializers.SlugRelatedField(many=False, slug_field='username', queryset=User.objects.all())
