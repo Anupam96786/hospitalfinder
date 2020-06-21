@@ -28,68 +28,76 @@ Hospital Signup
       </div>
       <div class="form-group">
         <label for="qualification">Qualifications</label>
-        <textarea class="form-control" id="qualification" rows="3"></textarea>
+        <select class="form-control" id="qualification">
+          <option>MBBS</option>
+          <option>BDS</option>
+          <option>BAMS</option>
+          <option>BUMS</option>
+          <option>BHMS</option>
+          <option>BYNS</option>
+          <option>B.V.Sc/AH</option>
+        </select>
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Submit</button>
       </div>
-  </form>
+    </form>
   </div>
   <div class="col-4">
-    Please check your email for confirmation mail. Send a scanned copy of your documents to get your account verified and registered.
+    Please check your email for confirmation mail. Send a scanned copy of your documents to get your account verified
+    and registered.
   </div>
 </div>
 <script>
   function getDoctors(senderId, callback) {
-            return $.get('/api/doctors', function (data) {
-                if (userState !== JSON.stringify(data)) {
-                    userState = JSON.stringify(data);
-                    const doc = data.reduce((res, user) => {
-                        if (user.id === senderId) {
-                            return res
-                        } else {
-                            return [userDiv(senderId, user.id, user.username, user.online,user.qualifications), ...res]
-                        }
-                    }, [])
-                    callback(doc)
-                }
-            })
-        }
+    return $.get('/api/doctors', function (data) {
+      if (userState !== JSON.stringify(data)) {
+        userState = JSON.stringify(data);
+        const doc = data.reduce((res, user) => {
+          if (user.id === senderId) {
+            return res
+          } else {
+            return [userDiv(senderId, user.id, user.username, user.online, user.qualifications), ...res]
+          }
+        }, [])
+        callback(doc)
+      }
+    })
+  }
   function drregister(username, password, email, quali) {
-    request='{"username": "' + username + '", "password": "' + password + '", "quali": "' + quali + '", "email": "' + email +'"}';
+    request = '{"username": "' + username + '", "password": "' + password + '", "quali": "' + quali + '", "email": "' + email + '"}';
     console.log(request);
-    $.post('/api/doctors',request,
-        function (data,status) {
-            console.log(status);
-            window.location = '/';
-        }).fail(function (response) {
-            $('#name').val('FAILED');
-            //to be corrected later
+    $.post('/api/doctors', request,
+      function (data, status) {
+        console.log(status);
+        window.location = '/';
+      }).fail(function (response) {
+        $('#name').val('FAILED');
+        //to be corrected later
 
-        })
-}
+      })
+  }
   $(function () {
     $('#dr_reg_form').on('submit', function (event) {
-        event.preventDefault();
-        var email = $('#email').val();
-        var quali= $('#qualification').val();
-        var username = $('#name').val();
-        username = username.replace(/\s+/g, '-');
-        $('#name').val(username);
-        if(username !== '')
-        {
-            var password = $('#password1').val();
-            if(password !== '' && password === $('#password2').val()){
-                drregister(username, password, email, quali);
-            }
-            else{
-                alert("The passwords doesn't match!");
-            }
+      event.preventDefault();
+      var email = $('#email').val();
+      var quali = $('#qualification').val();
+      var username = $('#name').val();
+      username = username.replace(/\s+/g, '-');
+      $('#name').val(username);
+      if (username !== '') {
+        var password = $('#password1').val();
+        if (password !== '' && password === $('#password2').val()) {
+          drregister(username, password, email, quali);
         }
-        else
-            alert("Please enter a valid username!");
+        else {
+          alert("The passwords doesn't match!");
+        }
+      }
+      else
+        alert("Please enter a valid username!");
     })
-})
+  })
 </script>
 
 {%endblock%}

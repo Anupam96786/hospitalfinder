@@ -20,12 +20,13 @@ CHAT WITH DOCTORS
     <script>
         let userState = ''
         
-        const userDiv = (senderId, receiverId, name, online) =>
+        const userDiv = (senderId, receiverId, name, online, qualifications="") =>
             (`<a href="/chat/${senderId}/${receiverId}" id="user${receiverId}" class="list-group-item list-group-item-action  text-gray rounded-0">
                   <div class="media-body ml-4">
                     <div class="d-flex align-items-center justify-content-between mb-1">
                       <h6 class="mb-0">${name}</h6>
                     </div>
+                  <p class="font-italic text-muted mb-0 text-small">${qualifications}</p>
                 </div>
               </a>
             `)
@@ -71,20 +72,20 @@ CHAT WITH DOCTORS
         }
         
         function getUsers(senderId, callback) {
-            return $.get('/api/users', function (data) {
+            return $.get('/api/doctors', function (data) {
                 if (userState !== JSON.stringify(data)) {
                     userState = JSON.stringify(data);
                     const doc = data.reduce((res, user) => {
                         if (user.id === senderId) {
                             return res
                         } else {
-                            return [userDiv(senderId, user.id, user.username, user.online), ...res]
+                            return [userDiv(senderId, user.id, user.username, user.online, user.qualifications), ...res]
                         }
                     }, [])
                     callback(doc)
                 }
             })
-        } 
+        }
         
         function register(username, password, email) {
             $.post('/api/users', '{"username": "' + username + '", "password": "' + password + '", "email": "' + email +'"}',
