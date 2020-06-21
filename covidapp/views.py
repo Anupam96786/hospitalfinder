@@ -1,10 +1,10 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.http.response import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-from .models import Message, UserProfile
+from .models import Message, UserProfile, DoctorProfile
 from .serializers import MessageSerializer, UserSerializer
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
@@ -71,7 +71,7 @@ def user_list(request, pk=None):
         if pk:
             users = User.objects.filter(id=pk)
         else:
-            users = User.objects.all().filter(is_active=True)
+            users = User.objects.all().filter(is_active=True, groups__name='user')
         serializer = UserSerializer(
             users, many=True, context={'request': request})
         return JsonResponse(serializer.data, safe=False)
@@ -80,9 +80,10 @@ def user_list(request, pk=None):
         data = JSONParser().parse(request)
         if len(data['username'].split(' ')) == 1:
             try:
-                email = data['email']
-                user = User.objects.create_user(username=data['username'], password=data['password'], email=email)
+                group = Group.objects.get(name='user')
+                user = User.objects.create_user(username=data['username'], password=data['password'], email=data['email'])
                 user.is_active = False
+                user.groups.add(group)
                 user.save()
                 UserProfile.objects.create(user=user)
                 current_site = get_current_site(request)
@@ -93,11 +94,47 @@ def user_list(request, pk=None):
                     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                     'token': account_activation_token.make_token(user),
                 })
-                to_email = email
+                to_email = data['email']
                 email = EmailMessage(
                     mail_subject, message, to=[to_email]
                 )
                 email.send()
+                return JsonResponse({'login': '0', 'created': '1'}, status=201)
+            except Exception:
+                return JsonResponse({'login': '0', 'created': '0'}, status=400)
+        else:
+            return JsonResponse({'login': '0', 'created': '0'}, status=400)
+
+
+@csrf_exempt
+def doctor_list(request, pk=None):
+    if request.method == 'GET':
+        if pk:
+            users = User.objects.filter(id=pk)
+        else:
+            users = User.objects.all().filter(is_active=True, groups__name='doctor')
+        serializer = UserSerializer(
+            users, many=True, context={'request': request})
+        return JsonResponse(serializer.data, safe=False)
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        if len(data['username'].split(' ')) == 1:
+            try:
+                group = Group.objects.get(name='doctor')
+                doctor = User.objects.create_user(username=data['username'], email=data['email'], password=data['password'])
+                doctor.is_active = False
+                doctor.groups.add(group)
+                doctor.save()
+                DoctorProfile.objects.create(doctor=doctor, qualifications=data['quali'])
+                # mail_subject = 'Activate your hospital finder account.'
+                # message = render_to_string('dr_mail.html', {
+                #     'user': doctor,
+                # })
+                # to_email = data['email']
+                # email = EmailMessage(
+                #     mail_subject, message, to=[to_email]
+                # )
+                # email.send()
                 return JsonResponse({'login': '0', 'created': '1'}, status=201)
             except Exception:
                 return JsonResponse({'login': '0', 'created': '0'}, status=400)

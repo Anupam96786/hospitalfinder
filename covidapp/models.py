@@ -39,4 +39,21 @@ class Message(models.Model):
     class Meta:
         ordering = ('timestamp',)
 
-
+class DoctorProfile(models.Model):
+    doctor = models.OneToOneField(User, on_delete=models.CASCADE)
+    qualifications = models.CharField(max_length=70, blank=False, null=False)
+    def __str__(self):
+        return self.doctor.username
+    def last_seen(self):
+        return cache.get('last_seen_%s' % self.user.username)
+    
+    def online(self):
+        if self.last_seen():
+            now = datetime.datetime.now()
+            if now > (self.last_seen() + datetime.timedelta(seconds=settings.USER_ONLINE_TIMEOUT)):
+                return False
+            else:
+                return True
+        else: 
+            return False
+    

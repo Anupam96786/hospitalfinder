@@ -8,36 +8,88 @@ Hospital Signup
 {%block content%}
 <div class="row">
   <div class="col-8 text-centre justify-content-center align-items-center">
-    <form method="POST">
+    <h3>DOCTOR REGISTRATION</h3>
+    <form id="dr_reg_form" method='post'>
       <div class="form-group">
         <label for="email">Email address</label>
         <input type="email" class="form-control" id="email" placeholder="name@example.com">
       </div>
       <div class="form-group">
-        <label for="Name">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="name@example.com">
+        <label for="username">username</label>
+        <input type="text" class="form-control" id="name" placeholder="username">
       </div>
       <div class="form-group">
         <label for="password1">Password</label>
-        <input type="password" class="form-control" id="password1" placeholder="name@example.com">
+        <input type="password" class="form-control" id="password1" placeholder="****">
       </div>
       <div class="form-group">
         <label for="password2">Password Again</label>
-        <input type="password" class="form-control" id="password2" placeholder="name@example.com">
+        <input type="password" class="form-control" id="password2" placeholder="****">
       </div>
       <div class="form-group">
         <label for="qualification">Qualifications</label>
         <textarea class="form-control" id="qualification" rows="3"></textarea>
       </div>
       <div class="form-group">
-        <button type="button" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
       </div>
-    </form>
+  </form>
   </div>
   <div class="col-4">
-    Please check your email for confirmation mail. Send a scanned copy of your documents to get your account verified
-    and registered.
+    Please check your email for confirmation mail. Send a scanned copy of your documents to get your account verified and registered.
   </div>
 </div>
+<script>
+  function getDoctors(senderId, callback) {
+            return $.get('/api/doctors', function (data) {
+                if (userState !== JSON.stringify(data)) {
+                    userState = JSON.stringify(data);
+                    const doc = data.reduce((res, user) => {
+                        if (user.id === senderId) {
+                            return res
+                        } else {
+                            return [userDiv(senderId, user.id, user.username, user.online,user.qualifications), ...res]
+                        }
+                    }, [])
+                    callback(doc)
+                }
+            })
+        }
+  function drregister(username, password, email, quali) {
+    request='{"username": "' + username + '", "password": "' + password + '", "quali": "' + quali + '", "email": "' + email +'"}';
+    console.log(request);
+    $.post('/api/doctors',request,
+        function (data,status) {
+            console.log(status);
+            window.location = '/';
+        }).fail(function (response) {
+            $('#name').val('FAILED');
+            //to be corrected later
+
+        })
+}
+  $(function () {
+    $('#dr_reg_form').on('submit', function (event) {
+        event.preventDefault();
+        var email = $('#email').val();
+        var quali= $('#qualification').val();
+        var username = $('#name').val();
+        username = username.replace(/\s+/g, '-');
+        $('#name').val(username);
+        if(username !== '')
+        {
+            var password = $('#password1').val();
+            if(password !== '' && password === $('#password2').val()){
+                drregister(username, password, email, quali);
+            }
+            else{
+                alert("The passwords doesn't match!");
+            }
+        }
+        else
+            alert("Please enter a valid username!");
+    })
+})
+</script>
 
 {%endblock%}
