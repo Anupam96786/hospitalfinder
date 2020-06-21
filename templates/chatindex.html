@@ -86,8 +86,8 @@ CHAT WITH DOCTORS
             })
         } 
         
-        function register(username, password) {
-            $.post('/api/users', '{"username": "' + username + '", "password": "' + password + '"}',
+        function register(username, password, email) {
+            $.post('/api/users', '{"username": "' + username + '", "password": "' + password + '", "email": "' + email +'"}',
                 function (data,status) {
                     console.log(status);
                     window.location = '/';
@@ -178,8 +178,11 @@ CHAT WITH DOCTORS
                     <h3>Register</h3>
                     <form id="register-form" class="form-group">
                         <div class="form-group">
-                            <input type="text" class="form-control validate" name="username" id="reg_username" placeholder="Email/Username" />
+                            <input type="text" class="form-control validate" name="username" id="reg_username" placeholder="Username" />
                             <label for="reg_username" id='label1' data-error="Username already taken"></label>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control validate" name="email" id="reg_email" placeholder="Email" />
                         </div>
                         <div class="form-group">
                             <input type="password" class="form-control" name="password1" id="reg_password1" placeholder="Password" />
@@ -191,6 +194,7 @@ CHAT WITH DOCTORS
                             <input type="submit" class="btnSubmit" value="Register" />
                         </div>
                     </form>
+                    <span id="countdown"></span>
                 </div>
             </div>
         </div>
@@ -199,12 +203,18 @@ CHAT WITH DOCTORS
             $(function () {
                 $('#register-form').on('submit', function (event) {
                     event.preventDefault();
+                    var email = $('#reg_email').val();
                     var username = $('#reg_username').val();
                     if(username !== '')
                     {
                         var password = $('#reg_password1').val();
                         if(password !== '' && password === $('#reg_password2').val()){
-                            register(username, password);
+                            register(username, password, email);
+                            var seconds = 10, $seconds = document.querySelector('#countdown');
+                            (function countdown() {
+                                $seconds.textContent = seconds + ' second' + (seconds == 1 ?  '' :  's')
+                                    if(seconds --> 0) setTimeout(countdown, 1000)
+                            })();
                         }
                         else{
                             alert("The passwords doesn't match!");
