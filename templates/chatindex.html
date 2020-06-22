@@ -71,22 +71,47 @@ CHAT WITH DOCTORS
             })
         }
         
-        function getUsers(senderId, callback) {
-            return $.get('/api/doctors', function (data) {
-                if (userState !== JSON.stringify(data)) {
-                    userState = JSON.stringify(data);
-                    const doc = data.reduce((res, user) => {
-                        if (user.id === senderId) {
-                            return res
-                        } else {
-                            return [userDiv(senderId, user.id, user.username, user.online, user.qualifications), ...res]
+        </script>
+        {% for group in request.user.groups.all %}
+            {% if group.name == 'user' %}
+            <script>
+                function getUsers(senderId, callback) {
+                    return $.get('/api/doctors', function (data) {
+                        if (userState !== JSON.stringify(data)) {
+                            userState = JSON.stringify(data);
+                            const doc = data.reduce((res, user) => {
+                                if (user.id === senderId) {
+                                    return res
+                                } else {
+                                    return [userDiv(senderId, user.id, user.username, user.online, user.qualifications), ...res]
+                                }
+                            }, [])
+                            callback(doc)
                         }
-                    }, [])
-                    callback(doc)
+                    })
                 }
-            })
-        }
-        
+            </script>
+            {% else %}
+            <script>
+                function getUsers(senderId, callback) {
+                    return $.get('/api/users', function (data) {
+                        if (userState !== JSON.stringify(data)) {
+                            userState = JSON.stringify(data);
+                            const doc = data.reduce((res, user) => {
+                                if (user.id === senderId) {
+                                    return res
+                                } else {
+                                    return [userDiv(senderId, user.id, user.username, user.online), ...res]
+                                }
+                            }, [])
+                            callback(doc)
+                        }
+                    })
+                }
+            </script>
+            {% endif %}
+        {% endfor %}
+        <script>
         function register(username, password, email) {
             $.post('/api/users', '{"username": "' + username + '", "password": "' + password + '", "email": "' + email +'"}',
                 function (data,status) {
