@@ -3,6 +3,9 @@
 
 __You can find a live version of our website [here](https://hospitalfinder.pythonanywhere.com).__
 
+
+_Youtube Demo: [here](https://www.youtube.com/watch?v=JaAnOFWMbUE)_
+
 Made by: Rajarshi Ghosh Dastidar, Anupam Samanta, Sagnik Sinha, Swairik Dey
 
 
@@ -12,6 +15,7 @@ Made by: Rajarshi Ghosh Dastidar, Anupam Samanta, Sagnik Sinha, Swairik Dey
 2. CSS3
 3. JS
 4. Django
+5. Python 3.7
 
 
 ## Dependencies
@@ -26,7 +30,7 @@ Made by: Rajarshi Ghosh Dastidar, Anupam Samanta, Sagnik Sinha, Swairik Dey
 
 ## Setup
 
-**Run the following lines of code to get up and running**
+**Run the following commands to get up and running**
 1. `python3 -m pip install -r dependency.txt`
 2. `python3 manage.py collectstatic`
 3. `python3 manage.py makemigrations`
@@ -37,3 +41,10 @@ Made by: Rajarshi Ghosh Dastidar, Anupam Samanta, Sagnik Sinha, Swairik Dey
 
 Having trouble with our site? Check out our sitemap or contact [support](mailto:rajarshighoshdastidar@gmail.com) and we’ll help you sort it out.
 
+
+
+### License
+Copyright (C) Rajarshi Ghosh Dastidar - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential  
+ * Written by [Rajarshi Ghosh Dastidar](mailto:rajarshighoshdastidar@gmail.com),Anupam Samanta, Sagnik Sinha, Swairik Dey
