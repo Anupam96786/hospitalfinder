@@ -6,11 +6,12 @@ Home
 
 {%block navpage%}
 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-    <li class="nav-item"><a class="nav-link" href='{% url "survey"%}'>Take COVID-19 Survey</a></li>
-    <li class="nav-item"><a class="nav-link" href='{% url "finder" %}'><i class="fa fa-ambulance" aria-hidden="true"></i> Nearby Hospitals</a></li>
-    <li class="nav-item"><a class="nav-link" href='{% url "tracker" %}'>COVID-19 Tracker</a></li>
-    <li class="nav-item"><a class="nav-link" href='{% url "awareness" %}'>Stay Safe!!</a></li>
-    <li class="nav-item"><a class="nav-link" href='{% url "diet" %}'>Diet Planner</a></li>
+  <li class="nav-item"><a class="nav-link" href='{% url "survey"%}'>Take COVID-19 Survey</a></li>
+  <li class="nav-item"><a class="nav-link" href='{% url "finder" %}'><i class="fa fa-ambulance" aria-hidden="true"></i>
+      Nearby Hospitals</a></li>
+  <li class="nav-item"><a class="nav-link" href='{% url "tracker" %}'>COVID-19 Tracker</a></li>
+  <li class="nav-item"><a class="nav-link" href='{% url "awareness" %}'>Stay Safe!!</a></li>
+  <li class="nav-item"><a class="nav-link" href='{% url "diet" %}'>Diet Planner</a></li>
 </ul>
 {%endblock%}
 
@@ -18,7 +19,8 @@ Home
 
 
 <style>
-  body, html {
+  body,
+  html {
     height: 100%;
   }
 
@@ -38,52 +40,62 @@ Home
 
 <main role="main">
 
-    <div class="bg jumbotron jumbotron-fluid">
-      <div class="container">
-        <h1 class="display-3 text-white"><b>Need help?</b></h1>
-        <h5 class="text-white">This is a service to locate nearby hospitals during an emergency.</h5>
-        <p><a class="btn btn-primary btn-lg" href='{% url "finder" %}' role="button">Locate Now »</a></p>
-      </div>
-    </div>
-
+  <div class="bg jumbotron jumbotron-fluid">
     <div class="container">
-      <div class="card-deck card-column">
+      <h1 class="display-3 text-white"><b>Need help?</b></h1>
+      <h5 class="text-white">This is a service to locate nearby hospitals during an emergency.</h5>
+      <p><a class="btn btn-primary btn-lg" href='{% url "finder" %}' role="button">Locate Now »</a></p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="card-deck card-column">
       <!-- Example row of columns -->
-          <div class="card">
-            <img class="card-img-top" src="{%static 'surveycard.png'%}" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">COVID-19 Survey</h5>
-              <p class="card-text">With an increase in COVID-19 cases, it is very important for early detection of symptoms and self-isolation. Take this survey to know if you are showing symptoms.</p>
-              <a href='{% url "survey" %}' class="align-self-end btn btn-secondary">Take Survey »</a>
-            </div>
-          </div>
-
-
-          <div class="card" >
-            <img class="card-img-top" src="{%static 'trackercard.jpg'%}" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">COVID-19 Tracker</h5>
-              <p class="card-text">See statewise statistics of COVID-19 and hospital status</p>
-              <a href='{% url "tracker" %}' class="align-self-end btn btn-secondary">View details »</a>
-            </div>
-
-        </div>
-          <div class="card" >
-            <img class="card-img-top" src="{%static 'faqcard.jpg'%}" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">FAQs</h5>
-              <p class="card-text">Frequently Asked Questions about COVID-19</p>
-              <a href="https://www.mohfw.gov.in/pdf/FAQ.pdf" target="_blank" class="align-self-end btn btn-secondary">Learn More »</a>
-            </div>
-
+      <div class="card">
+        <img class="card-img-top" src="{%static 'surveycard.png'%}" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">COVID-19 Survey</h5>
+          <p class="card-text">With an increase in COVID-19 cases, it is very important for early detection of symptoms
+            and self-isolation. Take this survey to know if you are showing symptoms.</p>
+          <a href='{% url "survey" %}' class="align-self-end btn btn-secondary">Take Survey »</a>
         </div>
       </div>
+
+
+      <div class="card">
+        <img class="card-img-top" src="{%static 'trackercard.jpg'%}" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">COVID-19 Tracker</h5>
+          <p class="card-text">See statewise statistics of COVID-19 and hospital status</p>
+          <a href='{% url "tracker" %}' class="align-self-end btn btn-secondary">View details »</a>
+        </div>
+
+      </div>
+      <div class="card">
+        <img class="card-img-top" src="{%static 'faqcard.jpg'%}" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">FAQs</h5>
+          <p class="card-text">Frequently Asked Questions about COVID-19</p>
+          <a href="https://www.mohfw.gov.in/pdf/FAQ.pdf" target="_blank" class="align-self-end btn btn-secondary">Learn
+            More »</a>
+        </div>
+
+      </div>
+      <div class="card">
+        <img class="card-img-top" src="{%static 'chat.png'%}" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">FAQs</h5>
+          <p class="card-text">Chat With Others</p>
+          <a href="{% url 'chatindex' %}" target="_blank" class="align-self-end btn btn-secondary">CHAT »</a>
+        </div>
+
+      </div>
     </div>
-      <hr>
+  </div>
+  <hr>
 
-    </div> <!-- /container -->
+  </div> <!-- /container -->
 
-  </main>
+</main>
 
 {%endblock%}
-
