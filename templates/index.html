@@ -60,8 +60,6 @@ Home
           <a href='{% url "survey" %}' class="align-self-end btn btn-secondary">Take Survey »</a>
         </div>
       </div>
-
-
       <div class="card">
         <img class="card-img-top" src="{%static 'trackercard.jpg'%}" alt="Card image cap">
         <div class="card-body">
@@ -69,7 +67,14 @@ Home
           <p class="card-text">See statewise statistics of COVID-19 and hospital status</p>
           <a href='{% url "tracker" %}' class="align-self-end btn btn-secondary">View details »</a>
         </div>
-
+      </div>
+      <div class="card">
+        <img class="card-img-top" src="{%static 'chat.png'%}" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Chat</h5>
+          <p class="card-text">Chat With Doctors</p>
+          <a href="{% url 'chatindex' %}" class="align-self-end btn btn-secondary">CHAT »</a>
+        </div>
       </div>
       <div class="card">
         <img class="card-img-top" src="{%static 'faqcard.jpg'%}" alt="Card image cap">
@@ -79,17 +84,8 @@ Home
           <a href="https://www.mohfw.gov.in/pdf/FAQ.pdf" target="_blank" class="align-self-end btn btn-secondary">Learn
             More »</a>
         </div>
-
       </div>
-      <div class="card">
-        <img class="card-img-top" src="{%static 'chat.png'%}" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">FAQs</h5>
-          <p class="card-text">Chat With Others</p>
-          <a href="{% url 'chatindex' %}" target="_blank" class="align-self-end btn btn-secondary">CHAT »</a>
-        </div>
 
-      </div>
     </div>
   </div>
   <hr>
