@@ -219,13 +219,13 @@ CHAT WITH DOCTORS
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Registration Successful</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
         <p id="regsuccessuname"></p>
         You have registered successfully. Please check your mail for confirmation and activate your account.
-      </div>
-      <div class="modal-footer">
-        <a href="{%url 'home'%}" class="btn btn-primary" >OK</button>
       </div>
     </div>
   </div>
@@ -233,8 +233,10 @@ CHAT WITH DOCTORS
 
 
 
-        <script>
-
+<script>
+        $("#regsuccess").on('hidden.bs.modal', function(){
+            window.location.replace("http://hospitalfinder.pythonanywhere.com/");
+        });
         function register(username, password, email) {
             $.post('/api/users', '{"username": "' + username + '", "password": "' + password + '", "email": "' + email +'"}',
                 function (data,status) {
