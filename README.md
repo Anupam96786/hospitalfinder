@@ -31,7 +31,8 @@ Made by: Rajarshi Ghosh Dastidar, Anupam Samanta, Sagnik Sinha, Swairik Dey
 ## Setup
 
 **Run the following commands to get up and running**
-1. `python3 -m pip install -r dependency.txt`
+1. `python3 -m pip install -r requirements.txt`
+2. `create .env file and add variables`
 2. `python3 manage.py collectstatic`
 3. `python3 manage.py makemigrations`
 4. `python3 manage.py migrate`
