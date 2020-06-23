@@ -15,116 +15,6 @@ CHAT WITH DOCTORS
 {%endblock%}
 
 {%block content%}
-    <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}"  media="screen,projection"/>
-
-    <script>
-        let userState = ''
-        
-        const userDiv = (senderId, receiverId, name, online, qualifications="") =>
-            (`<a href="/chat/${senderId}/${receiverId}" id="user${receiverId}" class="list-group-item list-group-item-action  text-gray rounded-0">
-                  <div class="media-body ml-4">
-                    <div class="d-flex align-items-center justify-content-between mb-1">
-                      <h6 class="mb-0">${name}</h6>
-                    </div>
-                  <p class="font-italic text-muted mb-0 text-small">${qualifications}</p>
-                </div>
-              </a>
-            `)
-//<a style="color: ${online ? 'green' : 'red'};" href="/chat/${senderId}/${receiverId}" id="user${receiverId}" class="list-group-item list-group-item-action bg-light">${name}</a>
-
-        function scrolltoend() {
-            $('#board').stop().animate({
-                scrollTop: $('#board')[0].scrollHeight
-            }, 800);
-        }
-        
-        const text_box = '<div class="card-panel right" style="width: 75%; position: relative">' +
-            '<div style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title">{sender}</div>' +'{message}'+
-            '</div>';
-        const sendermsg='<div class="media w-50 mb-3"><img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">'+'<div class="media-body ml-3">'+'<div class="bg-light rounded py-2 px-3 mb-2">'+'<p class="text-small mb-0 text-muted">'+'{message}'+'</p>'+'</div>'+'<p class="small text-muted"></p>'+'</div>'+'</div>'
-
-        const recievedmsg='<div class="media w-50 ml-auto mb-3">'+'<div class="media-body">'+'<div class="bg-primary rounded py-2 px-3 mb-2">'+'<p class="text-small mb-0 text-white">'+'{message}'+'</p>'+'</div>'+'<p class="small text-muted"></p>'+'</div>'+'</div>';
-
-
-        function send(sender, receiver, message) {
-            $.post('/api/messages', '{"sender": "' + sender + '", "receiver": "' + receiver + '","message": "' + message + '" }', function (data) {
-                console.log(data);
-                var box = recievedmsg.replace('{sender}', "You");
-                box = box.replace('{message}', message);
-                $('#board').append(box);
-                scrolltoend();
-            })
-        }
-        
-        function receive() {
-            $.get('/api/messages/' + sender_id + '/' + receiver_id, function (data) {
-                console.log(data);
-                if (data.length !== 0) {
-                    for (var i = 0; i < data.length; i++) {
-                        console.log(data[i]);
-                        var box = sendermsg.replace('{sender}', data[i].sender);
-                        box = box.replace('{message}', data[i].message);
-                        $('#board').append(box);
-                        scrolltoend();
-                    }
-                }
-            })
-        }
-        
-        </script>
-        {% for group in request.user.groups.all %}
-            {% if group.name == 'user' %}
-            <script>
-                function getUsers(senderId, callback) {
-                    return $.get('/api/doctors', function (data) {
-                        if (userState !== JSON.stringify(data)) {
-                            userState = JSON.stringify(data);
-                            const doc = data.reduce((res, user) => {
-                                if (user.id === senderId) {
-                                    return res
-                                } else {
-                                    return [userDiv(senderId, user.id, user.username, user.online, user.qualifications), ...res]
-                                }
-                            }, [])
-                            callback(doc)
-                        }
-                    })
-                }
-            </script>
-            {% else %}
-            <script>
-                function getUsers(senderId, callback) {
-                    return $.get('/api/users', function (data) {
-                        if (userState !== JSON.stringify(data)) {
-                            userState = JSON.stringify(data);
-                            const doc = data.reduce((res, user) => {
-                                if (user.id === senderId) {
-                                    return res
-                                } else {
-                                    return [userDiv(senderId, user.id, user.username, user.online), ...res]
-                                }
-                            }, [])
-                            callback(doc)
-                        }
-                    })
-                }
-            </script>
-            {% endif %}
-        {% endfor %}
-        <script>
-        function register(username, password, email) {
-            $.post('/api/users', '{"username": "' + username + '", "password": "' + password + '", "email": "' + email +'"}',
-                function (data,status) {
-                    console.log(status);
-                    window.location = '/';
-                }).fail(function (response) {
-                    document.getElementById("label1").innerHTML = "Username Taken...try another...";
-                    $('#reg_username').val('');
-
-
-                })
-        }
-    </script>
     <style>
         .login-container{
             margin-top: 5%;
@@ -179,18 +69,113 @@ CHAT WITH DOCTORS
             text-decoration: none;
         }
     </style>
+    <script>
+        let userState = ''
+
+        const userDiv = (senderId, receiverId, name, online, qualifications="") =>
+            (`<a href="/chat/${senderId}/${receiverId}" id="user${receiverId}" class="list-group-item list-group-item-action  text-gray rounded-0">
+                  <div class="media-body ml-4">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <h6 class="mb-0">${name}</h6>
+                    </div>
+                  <p class="font-italic text-muted mb-0 text-small">${qualifications}</p>
+                </div>
+              </a>
+            `)
+//<a style="color: ${online ? 'green' : 'red'};" href="/chat/${senderId}/${receiverId}" id="user${receiverId}" class="list-group-item list-group-item-action bg-light">${name}</a>
+
+        function scrolltoend() {
+            $('#board').stop().animate({
+                scrollTop: $('#board')[0].scrollHeight
+            }, 800);
+        }
+
+        const text_box = '<div class="card-panel right" style="width: 75%; position: relative">' +
+            '<div style="position: absolute; top: 0; left:3px; font-weight: bolder" class="title">{sender}</div>' +'{message}'+
+            '</div>';
+        const sendermsg=`<div class="media w-50 mb-3"><img src="{%static 'chatavatar.svg'%}" alt="user" width="50" class="rounded-circle"><div class="media-body ml-3"><div class="bg-light rounded py-2 px-3 mb-2"><p class="text-small mb-0 text-muted">{message}</p></div><p class="small text-muted"></p></div></div>`
+
+        const recievedmsg=`<div class="media w-50 ml-auto mb-3"><div class="media-body"><div class="bg-primary rounded py-2 px-3 mb-2"><p class="text-small mb-0 text-white">{message}</p></div><p class="small text-muted"></p></div></div>`;
+
+
+        function send(sender, receiver, message) {
+            $.post('/api/messages', '{"sender": "' + sender + '", "receiver": "' + receiver + '","message": "' + message + '" }', function (data) {
+                console.log(data);
+                var box = recievedmsg.replace('{sender}', "You");
+                box = box.replace('{message}', message);
+                $('#board').append(box);
+                scrolltoend();
+            })
+        }
+
+        function receive() {
+            $.get('/api/messages/' + sender_id + '/' + receiver_id, function (data) {
+                console.log(data);
+                if (data.length !== 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        console.log(data[i]);
+                        var box = sendermsg.replace('{sender}', data[i].sender);
+                        box = box.replace('{message}', data[i].message);
+                        $('#board').append(box);
+                        scrolltoend();
+                    }
+                }
+            })
+        }
+        </script>
+
+
+        {% for group in request.user.groups.all %}
+            {% if group.name == 'user' %}
+            <script>
+                function getUsers(senderId, callback) {
+                    return $.get('/api/doctors', function (data) {
+                        if (userState !== JSON.stringify(data)) {
+                            userState = JSON.stringify(data);
+                            const doc = data.reduce((res, user) => {
+                                if (user.id === senderId) {
+                                    return res
+                                } else {
+                                    return [userDiv(senderId, user.id, user.username, user.online, user.qualifications), ...res]
+                                }
+                            }, [])
+                            callback(doc)
+                        }
+                    })
+                }
+            </script>
+            {% else %}
+            <script>
+                function getUsers(senderId, callback) {
+                    return $.get('/api/users', function (data) {
+                        if (userState !== JSON.stringify(data)) {
+                            userState = JSON.stringify(data);
+                            const doc = data.reduce((res, user) => {
+                                if (user.id === senderId) {
+                                    return res
+                                } else {
+                                    return [userDiv(senderId, user.id, user.username, user.online), ...res]
+                                }
+                            }, [])
+                            callback(doc)
+                        }
+                    })
+                }
+            </script>
+            {% endif %}
+        {% endfor %}
+
     {% block body %}
 
 <div class="container login-container">
             <div class="row">
                 <div class="col-md-6 login-form-1">
                     <h3>Login</h3>
-                    {{error}}
                     <form id="login-form" class="form-group" method="post">
                         {% csrf_token %}
                         <div class="form-group">
-                            
-                            <input type="text" name="username" id="id_username" class="form-control" placeholder="Username/Email" value="" />
+                            <input type="text" name="username" id="id_username" class="form-control" placeholder="Username" value="" />
+                            <span>{{error}}</span>
                         </div>
                         <div class="form-group">
                             <input type="password" name="password" id="id_password" class="form-control" placeholder="Password" value="" />
@@ -205,7 +190,7 @@ CHAT WITH DOCTORS
                     <form id="register-form" class="form-group">
                         <div class="form-group">
                             <input type="text" class="form-control validate" name="username" id="reg_username" placeholder="Username" />
-                            <label for="reg_username" id='label1' data-error="Username already taken"></label>
+                            <span id="countdown"></span>
                         </div>
                         <div class="form-group">
                             <input type="email" class="form-control validate" name="email" id="reg_email" placeholder="Email" />
@@ -217,30 +202,64 @@ CHAT WITH DOCTORS
                             <input type="password" class="form-control" name="password2" id="reg_password2" placeholder="Enter Password Again"/>
                         </div>
                         <div class="form-group">
-                            <input type="submit" class="btnSubmit" value="Register" />
+                            <input type="submit" class="btnSubmit" value="Register" /><br/>
+                        </div>
+                        <div class="form-group">
+                            <a href="{%url 'signup'%}" class="btn btnSubmit">Register as Doctor</a>
                         </div>
                     </form>
-                    <span id="countdown"></span>
                 </div>
             </div>
         </div>
 
+
+
+<div class="modal fade" id="regsuccess" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Registration Successful</h5>
+      </div>
+      <div class="modal-body">
+        <p id="regsuccessuname"></p>
+        You have registered successfully. Please check your mail for confirmation and activate your account.
+      </div>
+      <div class="modal-footer">
+        <a href="{%url 'home'%}" class="btn btn-primary" >OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
         <script>
+
+        function register(username, password, email) {
+            $.post('/api/users', '{"username": "' + username + '", "password": "' + password + '", "email": "' + email +'"}',
+                function (data,status) {
+                    console.log(status);
+                    document.getElementById('regsuccessuname').innerHTML="Congratulations, "+ username;
+                    $('#regsuccess').modal('show')
+                }).fail(function (response) {
+                    document.getElementById("countdown").innerHTML = "Username Taken...try another...";
+                    $('#reg_username').val('');
+
+
+                })
+        }
+
             $(function () {
                 $('#register-form').on('submit', function (event) {
                     event.preventDefault();
                     var email = $('#reg_email').val();
                     var username = $('#reg_username').val();
+                    username = username.replace(/[\s\n]+/g, '_');
                     if(username !== '')
                     {
                         var password = $('#reg_password1').val();
                         if(password !== '' && password === $('#reg_password2').val()){
                             register(username, password, email);
-                            var seconds = 10, $seconds = document.querySelector('#countdown');
-                            (function countdown() {
-                                $seconds.textContent = seconds + ' second' + (seconds == 1 ?  '' :  's')
-                                    if(seconds --> 0) setTimeout(countdown, 1000)
-                            })();
                         }
                         else{
                             alert("The passwords doesn't match!");

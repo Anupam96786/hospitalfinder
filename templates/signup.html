@@ -2,79 +2,133 @@
 {% load static %}
 
 {%block title%}
-Hospital Signup
+Doctor's Registration
+{%endblock%}
+{%block navpage%}
+<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+  <li class="nav-item"><a class="nav-link" href='{% url "survey"%}'>Take COVID-19 Survey</a></li>
+  <li class="nav-item"><a class="nav-link" href='{% url "finder" %}'><i class="fa fa-ambulance" aria-hidden="true"></i>
+      Nearby Hospitals</a></li>
+  <li class="nav-item"><a class="nav-link" href='{% url "tracker" %}'>COVID-19 Tracker</a></li>
+  <li class="nav-item"><a class="nav-link" href='{% url "awareness" %}'>Stay Safe!!</a></li>
+  <li class="nav-item"><a class="nav-link" href='{% url "diet" %}'>Diet Planner</a></li>
+</ul>
 {%endblock%}
 
 {%block content%}
-<div class="row">
-  <div class="col-8 text-centre justify-content-center align-items-center">
-    <h3>DOCTOR REGISTRATION</h3>
-    <form id="dr_reg_form" method='post'>
-      <div class="form-group">
-        <label for="email">Email address</label>
-        <input type="email" class="form-control" id="email" placeholder="name@example.com">
+<style>
+    .note
+    {
+        text-align: center;
+        height: 80px;
+        background: -webkit-linear-gradient(left, #0072ff, #8811c5);
+        color: #fff;
+        font-weight: bold;
+        line-height: 80px;
+    }
+    .form-content
+    {
+        padding: 5%;
+        border: 1px solid #ced4da;
+        margin-bottom: 2%;
+    }
+    .form-control{
+        border-radius:1.5rem;
+    }
+    .btnSubmit
+    {
+        border:none;
+        border-radius:1.5rem;
+        padding: 1%;
+        width: 20%;
+        cursor: pointer;
+        background: #0062cc;
+        color: #fff;
+    }
+</style>
+<br>
+<div class="container register-form">
+    <div class="form">
+        <div class="note">
+            <p class="text text-weight-bold lead" style="font-size: 1.65rem">Doctors' Registration</p>
+        </div>
+        <form id="dr_reg_form" method='post'>
+            <div class="form-content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" id="email" placeholder="name@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="name" placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <label for="qualification">Qualifications</label>
+                            <input type="text" class="form-control" id="qualification" placeholder="Qualifications">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="password1">Password</label>
+                            <input type="password" class="form-control" id="password1" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <label for="password2">Confirm Password</label>
+                            <input type="password" class="form-control" id="password2" placeholder="Confirm Password">
+                        </div>
+                        <div class="form-group">
+                            <label id="alerts" class="text-danger"></label>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btnSubmit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<p>Please check your email for confirmation mail.</p>
+
+
+
+
+
+<div class="modal fade" id="regsuccess" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Registration Successful</h5>
       </div>
-      <div class="form-group">
-        <label for="username">username</label>
-        <input type="text" class="form-control" id="name" placeholder="username">
+      <div class="modal-body">
+        <p id="regsuccessuname"></p>
+        You have registered successfully. Please check your mail for confirmation. Send a scanned copy of your documents to get your account verified and activated.
       </div>
-      <div class="form-group">
-        <label for="password1">Password</label>
-        <input type="password" class="form-control" id="password1" placeholder="****">
+      <div class="modal-footer">
+        <a href="{%url 'home'%}" class="btn btn-primary" >OK</button>
       </div>
-      <div class="form-group">
-        <label for="password2">Password Again</label>
-        <input type="password" class="form-control" id="password2" placeholder="****">
-      </div>
-      <div class="form-group">
-        <label for="qualification">Qualifications</label>
-        <select class="form-control" id="qualification">
-          <option>MBBS</option>
-          <option>BDS</option>
-          <option>BAMS</option>
-          <option>BUMS</option>
-          <option>BHMS</option>
-          <option>BYNS</option>
-          <option>B.V.Sc/AH</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-    </form>
-  </div>
-  <div class="col-4">
-    Please check your email for confirmation mail. Send a scanned copy of your documents to get your account verified
-    and registered.
+    </div>
   </div>
 </div>
+
+
+
+
+
+
+
 <script>
-  function getDoctors(senderId, callback) {
-    return $.get('/api/doctors', function (data) {
-      if (userState !== JSON.stringify(data)) {
-        userState = JSON.stringify(data);
-        const doc = data.reduce((res, user) => {
-          if (user.id === senderId) {
-            return res
-          } else {
-            return [userDiv(senderId, user.id, user.username, user.online, user.qualifications), ...res]
-          }
-        }, [])
-        callback(doc)
-      }
-    })
-  }
   function drregister(username, password, email, quali) {
     request = '{"username": "' + username + '", "password": "' + password + '", "quali": "' + quali + '", "email": "' + email + '"}';
     console.log(request);
     $.post('/api/doctors', request,
       function (data, status) {
         console.log(status);
-        window.location = '/';
+        document.getElementById('regsuccessuname').innerHTML="Congratulations, "+ username;
+        $('#regsuccess').modal('show');
       }).fail(function (response) {
-        $('#name').val('FAILED');
-        //to be corrected later
-
+        document.getElementById('alerts').innerHTML="USERNAME ALREADY EXISTS.";
       })
   }
   $(function () {
@@ -83,9 +137,10 @@ Hospital Signup
       var email = $('#email').val();
       var quali = $('#qualification').val();
       var username = $('#name').val();
-      username = username.replace(/\s+/g, '-');
+      username = username.replace(/[\s\n]+/g, '_');
+      quali = quali.replace(/[\s\n]+/g, '_');
       $('#name').val(username);
-      if (username !== '') {
+      if (username !== ''){
         var password = $('#password1').val();
         if (password !== '' && password === $('#password2').val()) {
           drregister(username, password, email, quali);
