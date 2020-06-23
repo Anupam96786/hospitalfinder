@@ -35,11 +35,13 @@ Made by: Rajarshi Ghosh Dastidar, Anupam Samanta, Sagnik Sinha, Swairik Dey
 2. `python3 manage.py collectstatic`
 3. `python3 manage.py makemigrations`
 4. `python3 manage.py migrate`
-5. `python3 manage.py runserver`
+5. `python3 maange.py createsuperuser`
+6. `add doctor to doctor group from admin panel`
+7. `python3 manage.py runserver`
 
 ### Support or Contact
 
-Having trouble with our site? Check out our sitemap or contact [support](mailto:rajarshighoshdastidar@gmail.com) and we’ll help you sort it out.
+Having trouble with our site? Check out our sitemap or contact [support](mailto:hospitalfinder98@gmail.com) and we’ll help you sort it out.
 
 
 
