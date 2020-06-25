@@ -1,6 +1,0 @@
-django
-requests
-django-widget-tweaks
-djangorestframework
-pytz
-python-memcached

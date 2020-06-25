@@ -23,6 +23,8 @@ def finder(request):
 
 
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect('chats')
     return render(request, 'signup.html')
 
 
@@ -58,7 +60,7 @@ def chatindex(request):
         if user is not None:
             login(request, user)
         else:
-            return render(request, 'chatindex.html', {'error': 'Invalid Username/Password'})
+            return render(request, 'chatindex.html', {'error': 'Invalid Username/Password or account not activated, Please confirm your email ID.'})
         return redirect('chats')
 
 
@@ -126,15 +128,15 @@ def doctor_list(request, pk=None):
                 doctor.groups.add(group)
                 doctor.save()
                 DoctorProfile.objects.create(doctor=doctor, qualifications=data['quali'])
-                # mail_subject = 'Activate your hospital finder account.'
-                # message = render_to_string('dr_mail.html', {
-                #     'user': doctor,
-                # })
-                # to_email = data['email']
-                # email = EmailMessage(
-                #     mail_subject, message, to=[to_email]
-                # )
-                # email.send()
+                mail_subject = 'Activate your hospital finder account.'
+                message = render_to_string('dr_mail.html', {
+                'user': doctor,
+                })
+                to_email = data['email']
+                email = EmailMessage(
+                mail_subject, message, to=[to_email]
+                )
+                email.send()
                 return JsonResponse({'login': '0', 'created': '1'}, status=201)
             except Exception:
                 return JsonResponse({'login': '0', 'created': '0'}, status=400)
