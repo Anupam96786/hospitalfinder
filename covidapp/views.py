@@ -55,6 +55,9 @@ def chatindex(request):
         return render(request, 'chatindex.html', {'error': ''})
     if request.method == "POST":
         username, password = request.POST['username'], request.POST['password']
+        if len(username.split(' ')) > 1:
+            lst_usr = username.split(' ')
+            username = '_'.join(lst_usr)
         user = authenticate(username=username, password=password)
         print(user)
         if user is not None:
