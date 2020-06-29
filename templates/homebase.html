@@ -30,6 +30,9 @@
       padding-left: 0;
       padding-right: 0;
     }
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
 
@@ -46,13 +49,15 @@
         {%block navpage%}
         {%endblock%}
         <ul class="navbar-nav navbar-right">
+            <div id="installContainer" class="hidden"  style='padding : 0px 5px 3px 0px'>
+                <button id="butInstall" type="button" class="btn btn-secondary">Install</button>
+            </div>
           {%block login%}
           {% if request.user.is_authenticated %}
-          <li class="nav-item"><a class="nav-link" href='#'>Profile: {{ request.user.username }}</a></li>
-          <li class="nav-item" style='padding : 0px 5px 0px 0px'><a class="btn btn-light" href='{%url "chatindex"%}'>CHAT</a></li>
-          <li class="nav-item"><a class="btn btn-light" href="{% url 'logout' %}">LOGOUT</a></li>
+          <li class="nav-item" style='padding : 0px 5px 3px 0px'><a class="btn btn-light" href='{%url "chatindex"%}'>{{ request.user.username }}'s Chat</a></li>
+          <li class="nav-item" style='padding : 0px 5px 3px 0px'><a class="btn btn-light" href="{% url 'logout' %}">Logout</a></li>
           {% else %}
-          <li class="nav-item"><a class="btn btn-secondary" href='{%url "chatindex"%}'>CHAT</a></li>
+          <li class="nav-item"  style='padding : 0px 5px 3px 0px'><a class="btn btn-light" href='{%url "chatindex"%}'>Chat</a></li>
           {% endif %}
           {%endblock%}
         </ul>
@@ -67,14 +72,41 @@
   </div>
   <hr>
   <footer class="container">
-
     <p>For any COVID 19 related queries, call your State Helpline/Ministry of Health & Family Welfare's 24X7 helpline at
       1075 or 011-23978046</p>
     <p>Translate this page: {%include 'translate.html'%}</p>
     <p>© 2020 Rajarshi, Anupam, Sagnik, Swairik</p>
+
   </footer>
 </body>
 <script>
+    const divInstall = document.getElementById('installContainer');
+    const butInstall = document.getElementById('butInstall');
+
+    window.addEventListener('beforeinstallprompt', (event) => {
+      console.log('👍', 'beforeinstallprompt', event);
+      window.deferredPrompt = event;
+      divInstall.classList.toggle('hidden', false);
+      butInstall.click();
+    });
+    butInstall.addEventListener('click', () => {
+      console.log('👍', 'butInstall-clicked');
+      const promptEvent = window.deferredPrompt;
+      if (!promptEvent) {
+        return;
+      }
+      promptEvent.prompt();
+      promptEvent.userChoice.then((result) => {
+        console.log('👍', 'userChoice', result);
+        window.deferredPrompt = null;
+        divInstall.classList.toggle('hidden', true);
+      });
+    });
+    window.addEventListener('appinstalled', (event) => {
+      console.log('👍', 'appinstalled', event);
+    });
+
+
   if ('serviceWorker' in navigator) {
     console.log("Registering Service Worker");
     navigator.serviceWorker.register("{% url 'serviceworker.js' %}")
