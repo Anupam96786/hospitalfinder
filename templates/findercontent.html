@@ -1,155 +1,123 @@
-<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
-<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
-<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
-<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
-<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/p5.js"></script>
-<!--
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/addons/p5.sound.min.js"></script>
--->
-<div class="row">
-  <div class='col-12' style="width: 640px; height: 480px" id="mapContainer">
-      <button type="btn"  style="position:absolute;z-index: 9999;right:10;top: 10;" class="btn btn-outline-danger" id="recentre" type="submit">
-          <i class="fa fa-crosshairs" aria-hidden="true"></i>RECENTRE
-      </button>
-  </div>
-</div>
-<div class="row">
-  <div class="col-12">
-    <div class="table-responsive">
-      <table class="table table-sm table-dark" id="table"></table>
+{%load static%}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+    <!--https://github.com/CliffCloud/Leaflet.EasyButton-->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+
+<style>
+        html, body, #mapid {
+            height: 75vh;
+            width: 100vw;
+        }
+</style>
+    <div id="mapid">
+    </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover table-dark" id="table">
+            <thead>
+                <tr>
+                    <th scope="col">Sl. No</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Distance(Km)</th>
+                    <th scope="col">Address</th>
+                </tr>
+            </thead>
+            <tbody id="hospitaltablebody">
+
+            </tbody>
+        </table>
+      </div>
     </div>
   </div>
-</div>
 
 
-<script>
-let curloc;
-let main_url='https://places.ls.hereapi.com/places/v1/discover/explore?in=';
-let latlang;
-let ending='%3Br%3D45000&cat=hospital&size=1000&apiKey=yqGj9Hvx5Gvgqp-g9Eg37Z-sSIHEMwZgbzcWYOnxzxM';
-let url;
-let data;
-let hosp_loc;
-let mark;
-let len;
-var table,cnt=0,cols=[],sl=1;
 
-
-//setup calls geo locator
-function setup() {
-getPosition();
-}
-
-//fetches location using ip
-function getPosition() {
-        if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position){
-                curloc={lat:position.coords.latitude, lng:position.coords.longitude};
-                latlang=position.coords.latitude+'%2C'+position.coords.longitude;
-                mapLoader();
-            });
-        } else {
-            alert("Sorry, your browser does not support HTML5 geolocation.");
+    <script>
+        var hIcon = L.icon({
+            iconUrl: "{%static 'hicon64.png'%}",
+            iconSize:     [64,64], // size of the icon
+            iconAnchor:   [32,56], // point of the icon which will correspond to marker's location
+            popupAnchor:  [0, -38] // point from which the popup should open relative to the iconAnchor
+        });
+        var uIcon = L.icon({
+            iconUrl: "{%static 'uicon48.png'%}",
+            iconSize:     [48,48], // size of the icon
+            iconAnchor:   [24,44], // point of the icon which will correspond to marker's location
+            popupAnchor:  [0,-34] // point from which the popup should open relative to the iconAnchor
+        });
+        var curloc;
+        var map = L.map('mapid').setView([22.344812, 78.266602], 13);
+        /*L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoicmFqYXJzaGkwNyIsImEiOiJja2NxY3JsNzEwMDhmMnNyOG53MWJ4YnkwIn0.k_lXwTIEmzcv1XXEgMSagQ'
+        }).addTo(map);*/
+        //https://leaflet-extras.github.io/leaflet-providers/preview/
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 16,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        L.easyButton( 'fa-crosshairs', function(){
+            map.flyTo(curloc.latlng,16);
+          }).addTo(map);
+        function onLocationFound(e) {
+            curloc=e;
+            L.circle(e.latlng, {
+                color: '#e03',
+                fillColor: '#e03',
+                fillOpacity: 0.5,
+                radius: e.accuracy
+            }).addTo(map);
+            L.marker(e.latlng,{icon:uIcon}).addTo(map).bindPopup("You are within " + e.accuracy + " meters from this point").openPopup();
+            hereApiCaller(e);
         }
-    let btn=select('#recentre');
-    btn.mousePressed(recentre);
+
+        function onLocationError(e) {
+            alert("Geolocation Permission Denied. Please Reload Page.");
+            console.log(e.message);
+        }
+        map.locate({setView: true, maxZoom: 15});
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
+
+        var main_url = 'https://places.ls.hereapi.com/places/v1/discover/explore?in=',
+        ending = '%3Br%3D17768&cat=hospital&size=100&apiKey=yqGj9Hvx5Gvgqp-g9Eg37Z-sSIHEMwZgbzcWYOnxzxM';
+        function hereApiCaller(e) {
+            latlang = e.latlng.lat + '%2C' + e.latlng.lng;
+            url = main_url + latlang + ending;
+            fetch(url, {
+                method: 'GET'
+            }).then(function(response) {
+                if (response.ok) {
+                    return response.json();
+                }
+                return Promise.reject(response);
+            }).then(function(data) {
+                markerplacer(data);
+            });
+        }
+
+    function markerplacer(data) {
+        for (var i = 0; i < data.results.items.length; i++) {
+            L.marker([data.results.items[i].position[0], data.results.items[i].position[1]],{icon: hIcon})
+            .addTo(map)
+            .bindPopup("<b>" + data.results.items[i].title+ "</b><br>" + data.results.items[i].vicinity+'<br>'+(data.results.items[i].distance/1000)+'Kms');
+            var tabcontent= "<tr><td>"+ (i+1) +"</td><td>"+data.results.items[i].title + "</td><td>"+(data.results.items[i].distance/1000)+"</td><td>"+data.results.items[i].vicinity+"</td></tr>";
+            document.querySelector("#hospitaltablebody").innerHTML+=tabcontent;
+        }
     }
 
-
-function recentre(){
-  cpy.setCenter(curloc);
-  cpy.setZoom(13);
-  
-}
-
-//loads the map
-function mapLoader(){
-  var platform = new H.service.Platform({
-    'apikey': 'yqGj9Hvx5Gvgqp-g9Eg37Z-sSIHEMwZgbzcWYOnxzxM'
-  });
-  var maptypes = platform.createDefaultLayers();
-  var map = new H.Map(
-  document.getElementById('mapContainer'),maptypes.vector.normal.map,{zoom: 13,center: curloc});
-  cpy=map;
-  var mapEvents = new H.mapevents.MapEvents(map);
-  new H.mapevents.Behavior(mapEvents);
-  var ui = H.ui.UI.createDefault(map, maptypes);
-  //adding primary location marker
-  var picon=new H.map.Icon('https://img.icons8.com/ultraviolet/60/000000/marker.png');
-  var mylocmarker=new H.map.Marker(curloc,{icon: picon});
-  map.addObject(mylocmarker);
-  mylocmarker.setData("<p>YOU ARE HERE</p>");
-  
-  //making marker interactive
-  mylocmarker.addEventListener("tap", event =>{
-    var bubble=new H.ui.InfoBubble(curloc,{content: event.target.getData()});
-    ui.addBubble(bubble);
-  }, false);
-                                     
-  
-  //loading hospital data and loading markers
-  var icon=new H.map.Icon('https://img.icons8.com/officexs/28/000000/heart-health.png');
-  url=main_url+latlang+ending;
-  httpGet(url,'json' ,false, function(data) {
-    len=data.results.items.length;
-    for(i=0;i<len;i++){
-      hosp_loc={lat: data.results.items[i].position[0], lng: data.results.items[i].position[1]};
-      mark=new H.map.Marker(hosp_loc,{icon: icon})
-      map.addObject(mark);
-      let x=hosp_loc;
-      let str=('<b>'+data.results.items[i].title+'</b>'+'\n'+(data.results.items[i].vicinity)+'\n'+(data.results.items[i].distance/1000)+'Kms');
-      mark.addEventListener("tap", event =>{
-        var bubble = new H.ui.InfoBubble(x,{content: str});
-        ui.addBubble(bubble);
-      }, false);
-      var list=[data.results.items[i]];
-      constructTable('#table',list);
+    function recentre() {
+        map.flyTo(curloc.latlng,16);
     }
-  });
-}
-
-function constructTable(selector,list) {
-  if(cnt==0){
-    cols = Headers(list, selector);
-    cnt++;
-  }
-  for (var i = 0; i < list.length; i++) { 
-    var row = $('<tr/>');  
-    for (var colIndex = 0; colIndex < cols.length; colIndex++) { 
-      var val = list[i][cols[colIndex]];
-      // If there is any key, which is matching with the column name 
-      if (val == null) val = (sl++);   
-      row.append($('<td/>').html(val)); 
-    }
-    // Adding each row to the table 
-    $(selector).append(row); 
-  } 
-} 
-            
-function Headers(list, selector) { 
-  var columns = []; 
-  var header = $('<tr/>'); 
-  for (var i = 0; i < list.length; i++) { 
-    var row = list[i]; 
-    columns.push("Sl.No");
-    header.append($('<th scope="col"/>').html("Sl.NO."));
-    for (var k in row) { 
-      if ($.inArray(k, columns) == -1) { 
-        // Creating the header 
-        if(k=="title" || k=="vicinity" || k=="distance"){
-          columns.push(k); 
-          k=k.toUpperCase();
-          header.append($('<th scope="col"/>').html(k));
-        } 
-      } 
-    } 
-  } 
-  // Appending the header to the table 
-  $(selector).append(header); 
-  return columns;
-}
-
 </script>
-  
-</body></html>
