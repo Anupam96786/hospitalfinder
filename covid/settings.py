@@ -28,7 +28,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -133,7 +133,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static'), ]
-STATIC_ROOT = '/home/hospitalfinder/hospital-finder/assets'
+STATIC_ROOT =  os.path.join(BASE_DIR, 'assets')
 
 
 EMAIL_USE_TLS = True
