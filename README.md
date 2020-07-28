@@ -36,7 +36,7 @@ Made by: Rajarshi Ghosh Dastidar, Anupam Samanta, Sagnik Sinha, Swairik Dey
 2. `python3 manage.py collectstatic`
 3. `python3 manage.py makemigrations`
 4. `python3 manage.py migrate`
-5. `python3 maange.py createsuperuser`
+5. `python3 manage.py createsuperuser`
 6. `add doctor to doctor group from admin panel`
 7. `python3 manage.py runserver`
 
@@ -51,6 +51,6 @@ Having trouble with our site? Check out our sitemap or contact [support](mailto:
 
 ### License
 Copyright (C) Rajarshi Ghosh Dastidar - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential  
- * Written by [Rajarshi Ghosh Dastidar](mailto:rajarshighoshdastidar@gmail.com),Anupam Samanta, Sagnik Sinha, Swairik Dey
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.  
+ * Written and owned by [Rajarshi Ghosh Dastidar](mailto:rajarshighoshdastidar@gmail.com),Anupam Samanta, Sagnik Sinha, Swairik Dey
