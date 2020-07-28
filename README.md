@@ -51,6 +51,6 @@ Having trouble with our site? Check out our sitemap or contact [support](mailto:
 
 ### License
 Copyright (C) Rajarshi Ghosh Dastidar - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Unauthorized copying of this project or any of its files, via any medium is strictly prohibited.
  * Proprietary and confidential.  
  * Written and owned by [Rajarshi Ghosh Dastidar](mailto:rajarshighoshdastidar@gmail.com),Anupam Samanta, Sagnik Sinha, Swairik Dey
