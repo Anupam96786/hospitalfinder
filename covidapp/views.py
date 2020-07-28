@@ -25,7 +25,7 @@ def finder(request):
 def signup(request):
     if request.user.is_authenticated:
         return redirect('chats')
-    return render(request, 'signup.html')
+    return render(request, 'dr_register.html')
 
 
 def fallback(request):
@@ -36,8 +36,8 @@ def takesurvey(request):
     return render(request, 'survey.html')
 
 
-def trackerna(request):
-    return render(request, 'trackerna.html')
+def tracker(request):
+    return render(request, 'tracker.html')
 
 
 def awareness(request):
@@ -56,7 +56,7 @@ def chatindex(request):
     if request.method == "POST":
         username, password = request.POST['username'], request.POST['password']
         username=username.replace(" ","_")
-        udername=username.replace("\n","_")
+        username=username.replace("\n","_")
         user = authenticate(username=username, password=password)
         print(user)
         if user is not None:
@@ -92,7 +92,7 @@ def user_list(request, pk=None):
                 UserProfile.objects.create(user=user)
                 current_site = get_current_site(request)
                 mail_subject = 'Activate your hospital finder account.'
-                message = render_to_string('acc_active_email.html', {
+                message = render_to_string('mail_user_activation.html', {
                     'user': user,
                     'domain': current_site.domain,
                     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -131,7 +131,7 @@ def doctor_list(request, pk=None):
                 doctor.save()
                 DoctorProfile.objects.create(doctor=doctor, qualifications=data['quali'])
                 mail_subject = 'Activate your hospital finder account.'
-                message = render_to_string('dr_mail.html', {
+                message = render_to_string('mail_dr_activation.html', {
                 'user': doctor,
                 })
                 to_email = data['email']

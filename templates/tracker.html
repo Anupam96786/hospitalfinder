@@ -15,14 +15,271 @@ Case Tracker
 {%endblock%}
 
 {%block content%}
-<div class="row">
-    <div class="col-md-6">
-        {%include 'trackertable.html'%}
-    </div>
-    <div class="col-md-6">
-        <h1>Graphs</h1>
-        <img src="data:image/png;base64, {{ bar }}" class="img-fluid" alt="bargraph" />
-        <img src="data:image/png;base64, {{ pi }}" class="img-fluid" alt="bargraph" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/p5.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/addons/p5.sound.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+
+
+
+<div>
+    <div class="table-responsive">
+        <table id="table" class="table table-sm table-dark"></table>
     </div>
 </div>
+
+    <div class="accordion" id="accordionExample">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            VIEW STATEWISE STATS
+            </button>
+            </h5>
+        </div>
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="chart-container col-md-25 col-xs-18 col-lg-18 col-sm-18" style ="position: relative; 800vh; width 800vw">
+                <canvas id="myChart" width="800" height="800" class="img-responsive"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              VIEW ALL INDIA STATISTICS
+            </button>
+            </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div class="card-body overflow-auto">
+                <div class="chart-container col-md-25 col-xs-18 col-lg-18 col-sm-18" style ="height: 70%">
+                    <canvas id="myPie" width="100" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              VIEW DAILY CASE PROGRESSION
+            </button>
+            </h5>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body overflow-auto table-responsive">
+                <div class="chart-container col-md-25 col-xs-18 col-lg-18 col-sm-18" style ="position: relative; 800vh; width 800vw">
+                    <canvas id="myLine" width="200" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<p>NOTE: Rotate your mobile for proper graphs </p>
+<script>
+var url, raw_data;
+var recovered = [],
+  active = [],
+  deaths = [],
+  states = [],
+  confirmed = [];
+cnt = 0;
+
+function setup() {
+  loadData();
+
+}
+
+function loadData() {
+  url = 'https://api.covid19india.org/data.json';
+  httpGet(url, 'json', false, function(data) {
+    initializer(data.statewise);
+    Piecharter(data.statewise);
+    grapher(data.cases_time_series);
+  });
+}
+function initializer(raw_data) {
+  var list = [raw_data[0]];
+  constructTable('#table', list);
+  for (i = 0; i < 37; i++) {
+    states[i] = (raw_data[i + 1].state);
+    active[i] = (raw_data[i + 1].active);
+    deaths[i] = (raw_data[i + 1].deaths);
+    recovered[i] = (raw_data[i + 1].recovered);
+    confirmed[i] = (raw_data[i + 1].confirmed);
+    list = [raw_data[i + 1]];
+    constructTable('#table', list);
+  }
+  barmaker();
+}
+
+function barmaker() {
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+      labels: states,
+      datasets: [{
+          label: 'No of active cases',
+          data: active,
+          backgroundColor: 'rgba(99, 99, 255)',
+          borderColor: 'rgba(99, 99, 255)',
+          borderWidth: 1
+        },
+        {
+          label: 'No of cured cases',
+          data: recovered,
+          backgroundColor: 'rgba(99, 255, 99)',
+          borderColor: 'rgba(99, 255, 99)',
+          borderWidth: 1
+        },
+        {
+          label: 'No of deaths',
+          data: deaths,
+          backgroundColor: 'rgba(255, 99, 99)',
+          borderColor: 'rgba(255, 99, 99)',
+          borderWidth: 1
+        },
+        {
+          label: 'Total Cases',
+          data: confirmed,
+          backgroundColor: 'rgba(0, 99, 99,0)',
+          borderColor: 'rgba(0, 99, 99,0)',
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      maintainAspectRatio: false,
+      scales: {
+        xAxes: [{
+          stacked: true
+        }],
+        yAxes: [{
+          stacked: true
+        }]
+      }
+    }
+  });
+}
+
+//Pie
+
+function Piecharter(raw_data) {
+  var ctx = document.getElementById('myPie').getContext('2d');
+  var dat = [raw_data[0].active, raw_data[0].deaths, raw_data[0].recovered]
+  var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ["ACTIVE", "DEATH", "CURED"],
+      datasets: [{
+        data: dat,
+        backgroundColor: ['rgba(99, 99, 255)', 'rgba(255, 99, 99)', 'rgba(99, 255, 99)'],
+        borderColor: 'rgba(1)',
+        borderWidth: 1,
+      }]
+    },
+    options:{
+      maintainAspectRatio: true
+    }
+  });
+}
+
+function grapher(cases) {
+  var c = [];
+  var date = [],
+    dead = [];
+  recov = [];
+  for (let i = 0; i < cases.length; i++) {
+    date.push(cases[i].date);
+    c.push(cases[i].dailyconfirmed);
+    dead.push(cases[i].dailydeceased);
+    recov.push(cases[i].dailyrecovered);
+  }
+  var ctx = document.getElementById('myLine').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: date,
+      datasets: [{
+          label: "Cases Increase",
+          data: c,
+          fill: false,
+          borderColor: 'rgba(99,99,255)',
+          borderWidth: 3,
+        },
+        {
+          label: "Deaths Increase",
+          data: dead,
+          fill: false,
+          borderColor: 'rgba(255,99,99)',
+          borderWidth: 3,
+        },
+        {
+          label: "Daily Recovered",
+          data: recov,
+          fill: false,
+          borderColor: 'rgba(99,255,99)',
+          borderWidth: 3,
+        }
+      ]
+    },
+    options:{
+      maintainAspectRatio: true
+    }
+  });
+}
+
+//table
+
+function constructTable(selector, list) {
+
+  // Getting the all column names
+  if (cnt == 0) {
+    cols = Headers(list, '#table');
+    cnt++
+  }
+  // Traversing the JSON data
+  for (var i = 0; i < list.length; i++) {
+    var row = $('<tr/>');
+    for (var colIndex = 0; colIndex < cols.length; colIndex++) {
+      var val = list[i][cols[colIndex]];
+      // If there is any key, which is matching
+      // with the column name
+      if (val == null) val = (sl++);
+      row.append($('<td/>').html(val));
+    }
+    // Adding each row to the table
+    $(selector).append(row);
+  }
+}
+
+function Headers(list, selector) {
+  var columns = [];
+  var header = $('<tr/>');
+  for (var i = 0; i < list.length; i++) {
+     columns.push("state");
+     header.append($('<th/>').html("STATE"));
+    var row = list[i];
+    for (var k in row) {
+      if ($.inArray(k, columns) == -1) {
+        // Creating the header
+        if (k == "active" || k == "confirmed" || k == "deaths" || k == "recovered") {
+          columns.push(k);
+          k = k.toUpperCase();
+          header.append($('<th/>').html(k));
+        }
+      }
+    }
+  }
+
+  // Appending the header to the table
+  $(selector).append(header);
+  return columns;
+}
+</script>
+
+
 {%endblock%}
