@@ -22,7 +22,7 @@ Hospital Finder
 <style>
     #map1 {
       height: 60vh;
-      width: 99vw;
+      width: 100vw;
     }
     .mapbox-directions-instructions {
       overflow: scroll;
@@ -31,10 +31,24 @@ Hospital Finder
     canvas {
       display: block;
     }
+    .tablediv{
+        position:sticky;
+        height:38vh;
+        overflow-y:scroll;
+        overflow-x:hidden;
+    }
+    .tablediv::-webkit-scrollbar{
+        display: none;
+    }
+    .tablediv{
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 </style>
 <div style="position:abslolute;z-index:1000">
-<div id="map1"></div></div>
-<div style="position:sticky;height:40vh;overflow-y:scroll;overflow-x:hidden;">
+    <div id="map1"></div>
+</div>
+<div class="tablediv">
     <div class="row">
         <div class="col-12">
             <div class="table-responsive">
